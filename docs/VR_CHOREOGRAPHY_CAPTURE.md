@@ -490,6 +490,50 @@ real movement.
 - Keep the visualizer reading the **same** `.scp` format the transcriber reads —
   one parser, no divergence.
 
+### 7.1 Current developer tooling (offline, no VR required)
+
+Ahead of any VR runtime, a small Python toolchain already lets us generate,
+inspect, and visualize recordings using the `synthcopilot.motion` data model.
+All of it runs on a laptop with **no headset attached**.
+
+**Generate a fake dance recording** (deterministic, 30s @ 60 Hz by default):
+
+```bash
+python3 tools/generate_fake_motion.py
+# writes debug/fake_motion_recording.json (1800 frames)
+
+# options:
+python3 tools/generate_fake_motion.py \
+    --output debug/fake_motion_recording.json \
+    --duration 30 --sample-rate 60 --bpm 120 --seed 1234
+```
+
+It synthesizes a headset bob/sway, left/right controller side-to-side sweeps,
+periodic two-hand expansions, and alternating forward punches — enough motion
+shape to build the rest of the pipeline against before real capture exists.
+
+**Visualize a recording** (requires `pip install matplotlib`):
+
+```bash
+python3 tools/visualize_motion.py \
+    --input debug/fake_motion_recording.json \
+    --output debug/motion_plot.png
+```
+
+This writes **three** PNGs:
+
+| File | View | Axes |
+|------|------|------|
+| `debug/motion_plot.png` | 3D trajectory of all three devices | X / Z / Y (Y up) |
+| `debug/motion_plot_topdown.png` | top-down floor plane | X (right) / Z (forward) |
+| `debug/motion_plot_frontview.png` | front / camera-facing | X (right) / Y (up) |
+
+Each trajectory is colored by device (left = blue, right = pink, head = green,
+matching Synth Riders hand colors) and shaded light→dark over time, with a
+circle at the start and a square at the end. Pass `--no-time-color` for solid
+lines. The visualizer reads the same `MotionRecording` JSON that real capture
+will write, so it works unchanged once hardware capture lands.
+
 ---
 
 ## 8. How Captured Movement Becomes Notes, Rails, and Walls

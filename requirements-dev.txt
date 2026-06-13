@@ -1,0 +1,5 @@
+# Optional tooling dependencies for SynthCoPilot development.
+# The core data model (synthcopilot/motion.py) and the fake-motion generator
+# (tools/generate_fake_motion.py) use only the Python standard library.
+# The visualizer (tools/visualize_motion.py) needs matplotlib (which pulls numpy).
+matplotlib>=3.7
