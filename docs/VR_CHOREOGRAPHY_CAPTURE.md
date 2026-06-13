@@ -698,6 +698,33 @@ scale + offset`). Nothing upstream of export ever touches `.synth` units.
 > per-axis scale/offset, and only then fill in a verified profile. Until that
 > measurement exists, export stays in normalized space.
 
+### 8.8 Calibration: raw room frame → canonical frame (implemented)
+
+A captured take lives wherever the player happened to stand and face in their
+room. Before transcription we put every recording in a consistent **canonical
+frame**: floor at Y=0, player centered at the XZ origin, facing canonical forward
+(−Z), at a consistent scale. `synthcopilot/motion_calibration.py` implements this:
+
+- **`CalibrationProfile`** — `floor_y`, `center_x`, `center_z`, `scale`,
+  `forward_axis` (the player's facing in the XZ plane), and `flip_z` (handedness
+  adjustment), plus `name`/`notes`.
+- **`estimate_calibration(recording)`** — uses the **neutral stance** (assumed to
+  be the first ~3 s of the take, where the performer stands still) to recover the
+  `center` (mean headset XZ) and `forward_axis` (mean headset facing).
+- **`apply_calibration(recording, profile)`** — flips handedness (if set),
+  translates to the center/floor, yaws so `forward_axis` → −Z, and scales;
+  returns a new valid recording with the profile stored in `metadata`.
+- **`save_/load_calibration_profile`** — JSON persistence.
+
+This is **upstream of, and separate from**, the playfield normalization in §8.3
+(which re-origins on the head per frame and scales by arm reach). Honest scope:
+floor is best supplied by the recorder's Stage origin (so `estimate_calibration`
+assumes a floor-referenced input, `floor_y = 0`), and scale assumes meters
+(`scale = 1.0`) — what the neutral stance robustly yields is **center** and
+**forward**. The fake generator now holds a still neutral stance for its first
+`neutral_seconds` (default 3) and accepts an `origin_offset` so calibration has a
+real center to recover.
+
 ---
 
 ## 9. What We Are NOT Building Yet

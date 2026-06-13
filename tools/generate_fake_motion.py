@@ -42,6 +42,7 @@ DEFAULT_DURATION_SECONDS = 30.0
 DEFAULT_SAMPLE_RATE = 60.0
 DEFAULT_BPM = 120.0
 DEFAULT_SEED = 1234
+DEFAULT_NEUTRAL_SECONDS = 3.0  # initial still stance for calibration
 DEFAULT_OUTPUT_PATH = "debug/fake_motion_recording.json"
 
 # --- Synth Riders playfield bounds (meters, body-relative-ish) --------------
@@ -112,17 +113,26 @@ def generate_fake_motion_recording(
     bpm: float = DEFAULT_BPM,
     seed: int = DEFAULT_SEED,
     song_path: str = "songs/fake_song_segment.mp3",
+    neutral_seconds: float = DEFAULT_NEUTRAL_SECONDS,
+    origin_offset: tuple[float, float] = (0.0, 0.0),
 ) -> MotionRecording:
     """Synthesize a deterministic fake dance recording.
 
     The number of frames is ``round(duration_seconds * sample_rate)`` and
     timestamps are exact multiples of ``1 / sample_rate`` (strictly increasing).
+
+    For the first ``neutral_seconds`` the performer holds a still **neutral
+    stance** (used for calibration -- see ``synthcopilot/motion_calibration.py``);
+    dancing begins after. ``origin_offset`` shifts the whole room in the XZ plane,
+    so calibration has a non-trivial center to recover.
     """
     rng = random.Random(seed)
     num_frames = round(duration_seconds * sample_rate)
     dt = 1.0 / sample_rate
+    ox, oz = origin_offset
 
-    expansions, punches = _gesture_schedule(duration_seconds, rng)
+    dance_duration = max(0.0, duration_seconds - neutral_seconds)
+    expansions, punches = _gesture_schedule(dance_duration, rng)
 
     # First pass: positions + rotations, so we can finite-difference velocity.
     head_p: list[tuple[float, float, float]] = []
@@ -132,43 +142,57 @@ def generate_fake_motion_recording(
     left_q: list[tuple[float, float, float, float]] = []
     right_q: list[tuple[float, float, float, float]] = []
 
+    def _offset(p: tuple[float, float, float]) -> tuple[float, float, float]:
+        return (p[0] + ox, p[1], p[2] + oz)
+
     for i in range(num_frames):
         t = i * dt
+        td = t - neutral_seconds  # dance clock; < 0 during the neutral stance
+
+        if td < 0.0:
+            # --- Neutral stance: stand still in the resting pose (calibration) ---
+            head_p.append(_offset(_HEAD_BASE))
+            left_p.append(_offset(_LEFT_BASE))
+            right_p.append(_offset(_RIGHT_BASE))
+            head_q.append((0.0, 0.0, 0.0, 1.0))
+            left_q.append((0.0, 0.0, 0.0, 1.0))
+            right_q.append((0.0, 0.0, 0.0, 1.0))
+            continue
 
         # --- Head: gentle bob + sway + small nod/turn ---
-        bob = 0.03 * math.sin(2 * math.pi * 1.1 * t)        # vertical bob
-        sway = 0.04 * math.sin(2 * math.pi * 0.5 * t)       # weight shift
+        bob = 0.03 * math.sin(2 * math.pi * 1.1 * td)        # vertical bob
+        sway = 0.04 * math.sin(2 * math.pi * 0.5 * td)       # weight shift
         head = (
             _HEAD_BASE[0] + sway,
             _HEAD_BASE[1] + bob,
-            _HEAD_BASE[2] + 0.01 * math.sin(2 * math.pi * 0.5 * t),
+            _HEAD_BASE[2] + 0.01 * math.sin(2 * math.pi * 0.5 * td),
         )
-        head_p.append(_clamp_to_playfield(head))
+        head_p.append(_offset(_clamp_to_playfield(head)))
         head_q.append(
             _quat_from_euler(
-                roll=0.05 * math.sin(2 * math.pi * 0.5 * t),
-                pitch=0.08 * math.sin(2 * math.pi * 1.1 * t),
-                yaw=0.10 * math.sin(2 * math.pi * 0.33 * t),
+                roll=0.05 * math.sin(2 * math.pi * 0.5 * td),
+                pitch=0.08 * math.sin(2 * math.pi * 1.1 * td),
+                yaw=0.10 * math.sin(2 * math.pi * 0.33 * td),
             )
         )
 
         # --- Controllers: side-to-side sweeps around their resting pose ---
-        sweep = math.sin(2 * math.pi * 0.5 * t)             # shared phrase phase
-        lift = 0.06 * math.sin(2 * math.pi * 1.0 * t)
+        sweep = math.sin(2 * math.pi * 0.5 * td)             # shared phrase phase
+        lift = 0.06 * math.sin(2 * math.pi * 1.0 * td)
         left = [
             _LEFT_BASE[0] - 0.22 * sweep,
             _LEFT_BASE[1] + lift,
-            _LEFT_BASE[2] + 0.05 * math.sin(2 * math.pi * 0.7 * t),
+            _LEFT_BASE[2] + 0.05 * math.sin(2 * math.pi * 0.7 * td),
         ]
         right = [
             _RIGHT_BASE[0] + 0.22 * sweep,
             _RIGHT_BASE[1] - lift,
-            _RIGHT_BASE[2] + 0.05 * math.sin(2 * math.pi * 0.7 * t + 1.0),
+            _RIGHT_BASE[2] + 0.05 * math.sin(2 * math.pi * 0.7 * td + 1.0),
         ]
 
         # --- Two-hand expansions: both hands push outward and up ---
         for center in expansions:
-            env = _bell(t, center, 0.45)
+            env = _bell(td, center, 0.45)
             if env < 1e-3:
                 continue
             left[0] -= 0.35 * env
@@ -180,15 +204,15 @@ def generate_fake_motion_recording(
 
         # --- Punches: a quick forward thrust by one hand ---
         for center, p_hand in punches:
-            env = _bell(t, center, 0.16)
+            env = _bell(td, center, 0.16)
             if env < 1e-3:
                 continue
             target = left if p_hand == "l" else right
             target[2] -= 0.45 * env          # drive forward (more negative z)
             target[1] += 0.05 * env
 
-        left_p.append(_clamp_to_playfield((left[0], left[1], left[2])))
-        right_p.append(_clamp_to_playfield((right[0], right[1], right[2])))
+        left_p.append(_offset(_clamp_to_playfield((left[0], left[1], left[2]))))
+        right_p.append(_offset(_clamp_to_playfield((right[0], right[1], right[2]))))
 
         # Controllers roughly face forward with a little wrist motion.
         left_q.append(_quat_from_euler(0.0, 0.0, 0.15 * sweep))
@@ -236,6 +260,8 @@ def generate_fake_motion_recording(
             "synthetic": True,
             "seed": seed,
             "duration_seconds": duration_seconds,
+            "neutral_seconds": neutral_seconds,
+            "origin_offset": [ox, oz],
             "gestures": {
                 "expansions": len(expansions),
                 "punches": len(punches),
@@ -251,6 +277,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--sample-rate", type=float, default=DEFAULT_SAMPLE_RATE)
     parser.add_argument("--bpm", type=float, default=DEFAULT_BPM)
     parser.add_argument("--seed", type=int, default=DEFAULT_SEED)
+    parser.add_argument("--neutral-seconds", type=float, default=DEFAULT_NEUTRAL_SECONDS)
     args = parser.parse_args(argv)
 
     recording = generate_fake_motion_recording(
@@ -258,6 +285,7 @@ def main(argv: list[str] | None = None) -> int:
         sample_rate=args.sample_rate,
         bpm=args.bpm,
         seed=args.seed,
+        neutral_seconds=args.neutral_seconds,
     )
     save_motion_recording(recording, args.output)
     print(
