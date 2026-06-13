@@ -601,6 +601,19 @@ A **rail** is a held, flowing path. Signals:
 - The path is downsampled/fit into an ordered set of rail points; we enforce
   smoothness and minimum segment spacing for playability.
 
+> **Implemented (first pass):** `synthcopilot/motion_to_map.py` is the initial
+> rails-only bridge. `normalize_motion_to_playfield` maps body-relative hand
+> positions into a normalized `[-1,1]×[-1,1]` Synth Riders-style playfield (X =
+> left/right, Y = down/up; depth dropped — time is the approach axis).
+> `generate_rails_from_motion` takes the detected `MovementSegment`s, merges a
+> hand's continuous-motion primitives (sweeps, lifts/drops, circles) into bounded
+> expressive spans, then downsamples + smooths + clamps + jitter-filters each
+> span into a `Rail` of `RailNode`s, snapping node times to the beat grid when
+> `bpm`/`offset` are known. A `difficulty` knob (`Easy`…`Master`) controls node
+> spacing and rail length. Notes and walls are **not** generated yet, and no
+> `.synth` file is written — the `Rail.to_dict()` output is a clean intermediate
+> for a future `.synth` writer.
+
 ### 8.4 Walls (body obstacles)
 
 A **wall** is something the body avoids — and in capture terms, a wall is the
