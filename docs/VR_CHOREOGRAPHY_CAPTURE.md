@@ -698,6 +698,32 @@ scale + offset`). Nothing upstream of export ever touches `.synth` units.
 > per-axis scale/offset, and only then fill in a verified profile. Until that
 > measurement exists, export stays in normalized space.
 
+**Measuring the real units — `tools/inspect_synth_coordinates.py`.** This is the
+measurement harness for that verification step. Point it at one or more known-good
+`.synth` files exported from the official editor:
+
+```bash
+python3 tools/inspect_synth_coordinates.py --input known_map1.synth known_map2.synth
+# -> prints stats; writes debug/synth_coordinate_report.json
+```
+
+It reads the editor `.synth` (a ZIP whose `beatmap.meta.bin` member is JSON) with
+the **standard library only** — no `synth_mapping_helper` dependency — and reports
+the **raw** note/rail coordinates: totals (notes / rails / rail nodes), per-axis
+min/max/mean, per-hand ranges, outliers, and whether **Z** reads as a beat,
+seconds, an editor-depth (it correlates Z with each note's time key), or a spatial
+axis. From the observed extents it derives a *candidate* `CoordinateMappingProfile`
+that maps normalized `[-1,1]` onto the measured range. The recommendation is
+explicitly **UNVERIFIED** — it reflects only the supplied files' note extent
+(which may not cover the full playfield), and it neither hardcodes nor guesses the
+range. It is measurement only; it does not modify the writer. If an input is not a
+recognizable editor `.synth`, it fails with a clear explanation.
+
+> To produce a verified profile: gather a few editor maps that exercise the
+> playfield edges, run the harness, confirm the Z interpretation, and hand-confirm
+> the recommended scale/offset before promoting it into a real (non-`NaN`)
+> `SYNTH_RIDERS_*` profile.
+
 ### 8.8 Calibration: raw room frame → canonical frame (implemented)
 
 A captured take lives wherever the player happened to stand and face in their

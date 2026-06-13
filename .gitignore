@@ -20,3 +20,6 @@ htmlcov/
 
 # Demo scratch output (regenerable via tools/demo_motion_pipeline.py)
 debug/demo/
+
+# Coordinate inspection report (generated from user-supplied .synth files)
+debug/synth_coordinate_report.json
