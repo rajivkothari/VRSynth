@@ -17,3 +17,6 @@ htmlcov/
 
 # OS / editor
 .DS_Store
+
+# Demo scratch output (regenerable via tools/demo_motion_pipeline.py)
+debug/demo/
