@@ -640,6 +640,34 @@ reviews and edits, not a finished map. The pipeline's job is to get a creator
 80% of the way from "a dance I performed" to "a map I'd ship," fast. Full
 auto-quality is an aspiration, not a near-term promise.
 
+### 8.7 Coordinate systems: capture-normalized vs `.synth` (deferred)
+
+There are **two** coordinate spaces, kept strictly separate by a single boundary
+layer (`synthcopilot/coordinate_systems.py`):
+
+1. **Normalized capture/map space** — a hardware- and game-agnostic `[-1, 1]`
+   space (`NormalizedPoint`, range `NORMALIZED_RANGE`). *All* motion capture,
+   analysis, and map-object generation happen here. Every generated rail node is
+   a normalized point.
+2. **Synth space** — the final Synth Riders `.synth`/editor units (`SynthPoint`).
+
+Conversion happens in **exactly one place**: the future writer/export step,
+which applies a `CoordinateMappingProfile` (per-axis `synth = normalized *
+scale + offset`). Nothing upstream of export ever touches `.synth` units.
+
+> **We intentionally do NOT know the real Synth Riders coordinate range yet,**
+> and we refuse to invent it. The default `DEFAULT_NORMALIZED_PROFILE` is
+> identity/pass-through, so motion never gets silently scaled into made-up units.
+> A `SYNTH_RIDERS_UNVERIFIED_PROFILE` placeholder marks the remaining work; its
+> values are `NaN` so `validate_profile()` rejects it and it cannot be used by
+> accident.
+>
+> **Before any real `.synth` emission**, we must *verify* the coordinate scale
+> and offset from a **known editor-exported `.synth` file**: export a beatmap
+> from the Synth Riders editor, read back note/rail/wall positions, solve for the
+> per-axis scale/offset, and only then fill in a verified profile. Until that
+> measurement exists, export stays in normalized space.
+
 ---
 
 ## 9. What We Are NOT Building Yet

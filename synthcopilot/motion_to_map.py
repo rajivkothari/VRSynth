@@ -18,9 +18,14 @@ Scope of this first pass:
 Synth Riders places notes/rails on a plane facing the player (X = left..right,
 Y = down..up); the approach toward the player is the *time* axis, so depth (Z) is
 dropped for placement. We normalize body-relative hand positions into a
-``[-1, 1]`` x ``[-1, 1]`` playfield. The exact mapping to real ``.synth`` units is
-deliberately deferred to the future ``.synth`` writer -- this module's output is a
-clean, unit-normalized intermediate.
+``[-1, 1]`` x ``[-1, 1]`` playfield (``NORMALIZED_RANGE`` from
+:mod:`synthcopilot.coordinate_systems`).
+
+**All objects this module emits stay in normalized space** -- every
+:class:`RailNode` is a normalized point (see :meth:`RailNode.to_normalized_point`).
+The exact mapping to real ``.synth`` units is deliberately deferred to the export
+step, which is the *only* place a :class:`~synthcopilot.coordinate_systems.\
+CoordinateMappingProfile` is applied. Nothing here invents Synth Riders units.
 """
 
 from __future__ import annotations
@@ -29,6 +34,7 @@ import math
 from dataclasses import asdict, dataclass, field
 from typing import Any, Optional
 
+from .coordinate_systems import NORMALIZED_RANGE, NormalizedPoint
 from .motion import MotionRecording, PoseSample
 from .motion_analysis import (
     CIRCULAR_MOTION,
@@ -50,9 +56,10 @@ __all__ = [
     "generate_rails_from_motion",
 ]
 
-# Normalized Synth Riders-style playfield bounds (see module docstring).
-PLAYFIELD_X_RANGE = (-1.0, 1.0)
-PLAYFIELD_Y_RANGE = (-1.0, 1.0)
+# Normalized playfield bounds. Single-sourced from the coordinate-system boundary
+# layer so motion->map never invents its own (or any real Synth Riders) range.
+PLAYFIELD_X_RANGE = NORMALIZED_RANGE
+PLAYFIELD_Y_RANGE = NORMALIZED_RANGE
 
 # Body-relative normalization constants.
 _ARM_REACH_M = 0.65          # horizontal/vertical reach that maps to a playfield edge
@@ -93,6 +100,14 @@ class RailNode:
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
+
+    def to_normalized_point(self) -> NormalizedPoint:
+        """This node's position as a normalized point (depth is the time axis).
+
+        Rails live in normalized space; the export step is responsible for mapping
+        the result into ``.synth`` units via a CoordinateMappingProfile.
+        """
+        return NormalizedPoint(x=self.x, y=self.y, z=0.0)
 
 
 @dataclass
