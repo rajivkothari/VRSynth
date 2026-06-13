@@ -80,11 +80,18 @@ hardware backends that fail loudly with install/setup guidance.
 
 ### Option 1 — Unity + OpenXR recorder (recommended for first real capture)
 
-See [`unity_openxr/README.md`](unity_openxr/README.md). Unity gives the best
-Quest + PCVR coverage, mature pose/input APIs, easy audio playback, and a free
-in-headset visualizer. The C# scripts in `unity_openxr/scripts/` are
-**scaffolding** that show the intended structure and emit the exact JSON schema
-above; they are not a complete Unity project (no engine is vendored here).
+Full implementation spec: **[`UNITY_RECORDER_SPEC.md`](UNITY_RECORDER_SPEC.md)**
+(Unity version, packages, scene, audio, UX, JSON format, file naming,
+calibration, coordinate conversion, limitations). Concrete first-draft script:
+**[`unity/SynthCoPilotMotionRecorder.cs`](unity/SynthCoPilotMotionRecorder.cs)** —
+a single MonoBehaviour that references the HMD/left/right transforms, samples at a
+fixed interval, plays audio, and writes the `MotionRecording` JSON.
+
+Unity gives the best Quest + PCVR coverage, mature pose/input APIs, easy audio
+playback, and a free in-headset visualizer. An earlier multi-file decomposition
+of the same idea lives in [`unity_openxr/scripts/`](unity_openxr/scripts/)
+(`SongClock`/`PoseRecorder`/`MotionRecordingWriter`). Neither is a complete Unity
+project (no engine is vendored here), and neither has been run on hardware.
 
 - **Pros:** broadest hardware reach (standalone Quest *and* PCVR), built-in
   rendering for review, well-trodden OpenXR plugin.
@@ -157,14 +164,17 @@ budget per doc §5.4).
 ```
 vr_recorder/
 ├── README.md                     # this file
+├── UNITY_RECORDER_SPEC.md        # Option 1: full Unity implementation spec
 ├── python_recorder/              # Option 2 (Python)
 │   ├── pose_source.py            # PoseSource interface + Synthetic (real) + HW stubs
 │   ├── audio.py                  # audio player abstraction (best-effort/no-op)
 │   ├── recorder.py               # recording loop -> MotionRecording
 │   └── __main__.py               # CLI
-└── unity_openxr/                 # Option 1 (Unity)
+├── unity/                        # Option 1: concrete first-draft recorder
+│   └── SynthCoPilotMotionRecorder.cs
+└── unity_openxr/                 # Option 1: earlier multi-file scaffolding
     ├── README.md                 # project setup + packages
-    └── scripts/                  # C# scaffolding (drop into a Unity project)
+    └── scripts/
         ├── PoseRecorder.cs
         ├── SongClock.cs
         └── MotionRecordingWriter.cs
