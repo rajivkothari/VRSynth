@@ -608,9 +608,12 @@ A **rail** is a held, flowing path. Signals:
 > `generate_rails_from_motion` takes the detected `MovementSegment`s, merges a
 > hand's continuous-motion primitives (sweeps, lifts/drops, circles) into bounded
 > expressive spans, then downsamples + smooths + clamps + jitter-filters each
-> span into a `Rail` of `RailNode`s, snapping node times to the beat grid when
-> `bpm`/`offset` are known. A `difficulty` knob (`Easy`…`Master`) controls node
-> spacing and rail length. Notes and walls are **not** generated yet, and no
+> span into a `Rail` of `RailNode`s. Node times are *lightly* snapped to the beat
+> grid via `synthcopilot/timing.py` (`seconds_to_beat` / `beat_to_seconds` /
+> `snap_time_to_grid`): start/end anchors snap onto the grid for clean downbeats,
+> while internal nodes snap only within a tight tolerance so the dancer's
+> expressive off-grid timing survives. A `difficulty` knob (`Easy`…`Master`)
+> controls node spacing, rail length, and grid subdivision. Notes and walls are **not** generated yet, and no
 > `.synth` file is written — the `Rail.to_dict()` output is a clean intermediate
 > for a future `.synth` writer.
 

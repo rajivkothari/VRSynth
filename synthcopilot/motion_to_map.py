@@ -36,6 +36,7 @@ from typing import Any, Optional
 
 from .coordinate_systems import NORMALIZED_RANGE, NormalizedPoint
 from .motion import MotionRecording, PoseSample
+from .timing import seconds_to_beat, snap_time_to_grid
 from .motion_analysis import (
     CIRCULAR_MOTION,
     DOWNWARD_DROP,
@@ -87,6 +88,12 @@ DIFFICULTIES: dict[str, dict[str, float]] = {
 
 # Drop consecutive rail nodes closer than this (normalized) to kill jitter.
 _MIN_NODE_SPACING = 0.04
+
+# Beat-snap tolerance as a fraction of one grid cell. Start/end anchors snap to
+# the nearest grid line (half a cell => effectively always), while internal nodes
+# only snap when already very close, so expressive off-grid motion is preserved.
+_ANCHOR_SNAP_FRACTION = 0.5
+_INTERNAL_SNAP_FRACTION = 0.15
 
 
 @dataclass
@@ -359,21 +366,28 @@ def _build_nodes(
     recording: MotionRecording,
     snap_subdiv: int,
 ) -> list[RailNode]:
+    """Turn (time, x, y) samples into rail nodes with light beat snapping.
+
+    Start/end anchors snap onto the grid (cleaner downbeats), while internal nodes
+    snap only within a tight tolerance -- preserving the dancer's expressive
+    timing through the body of the rail. Times are kept strictly increasing.
+    """
     bpm = recording.bpm
     offset = recording.offset or 0.0
+    snap_enabled = bool(bpm and bpm > 0 and snap_subdiv > 0)
+    cell = 60.0 / (bpm * snap_subdiv) if snap_enabled else 0.0
+
     nodes: list[RailNode] = []
     last_time: Optional[float] = None
-    for t, x, y in points:
+    n = len(points)
+    for i, (t, x, y) in enumerate(points):
         beat: Optional[float] = None
-        if bpm and bpm > 0:
-            raw_beat = (t - offset) * bpm / 60.0
-            if snap_subdiv > 0:
-                snapped_beat = round(raw_beat * snap_subdiv) / snap_subdiv
-            else:
-                snapped_beat = raw_beat
-            beat = snapped_beat
-            t = snapped_beat * 60.0 / bpm + offset
-        # Keep times strictly increasing after snapping.
+        if snap_enabled:
+            is_anchor = i == 0 or i == n - 1
+            frac = _ANCHOR_SNAP_FRACTION if is_anchor else _INTERNAL_SNAP_FRACTION
+            t = snap_time_to_grid(t, bpm, offset, snap_subdiv, tolerance=cell * frac)
+            beat = seconds_to_beat(t, bpm, offset)
+        # Keep times strictly increasing (a snapped anchor could otherwise collide).
         if last_time is not None and t <= last_time:
             continue
         last_time = t

@@ -204,6 +204,30 @@ class GenerateRailsTests(unittest.TestCase):
     def test_empty_segments_yield_no_rails(self) -> None:
         self.assertEqual(generate_rails_from_motion(self.rec, [], "Master"), [])
 
+    def test_anchors_snap_to_grid_internal_preserves_expression(self) -> None:
+        # Start/end anchors should land exactly on the beat grid; internal nodes
+        # should largely keep the dancer's off-grid timing.
+        subdiv = DIFFICULTIES["Master"]["snap_subdiv"]
+
+        def on_grid(beat: float) -> bool:
+            return abs(round(beat * subdiv) - beat * subdiv) < 1e-6
+
+        anchors_on_grid = anchors = internal_off_grid = internal = 0
+        for rail in self.rails:
+            for j, node in enumerate(rail.nodes):
+                if j == 0 or j == len(rail.nodes) - 1:
+                    anchors += 1
+                    anchors_on_grid += on_grid(node.beat)
+                else:
+                    internal += 1
+                    internal_off_grid += not on_grid(node.beat)
+
+        # Every anchor lands on the grid...
+        self.assertEqual(anchors_on_grid, anchors)
+        # ...while a clear majority of internal nodes stay expressively off-grid.
+        self.assertGreater(internal, 0)
+        self.assertGreater(internal_off_grid, internal // 2)
+
 
 if __name__ == "__main__":
     unittest.main()
