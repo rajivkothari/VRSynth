@@ -26,13 +26,10 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from synthcopilot.coordinate_systems import CoordinateMappingProfile  # noqa: E402
 from synthcopilot.motion import save_motion_recording  # noqa: E402
 from synthcopilot.motion_analysis import segment_motion  # noqa: E402
-from synthcopilot.smh_io import (  # noqa: E402
-    SynthExportUnavailable,
-    write_normalized_json,
-    write_synth,
-)
+from synthcopilot.smh_io import ExportProfileError, export_track  # noqa: E402
 from synthcopilot.cli import build_track_data  # noqa: E402
 from tools.analyze_motion import build_report, format_summary  # noqa: E402
 from tools.generate_fake_motion import generate_fake_motion_recording  # noqa: E402
@@ -46,6 +43,7 @@ def run_demo(
     difficulty: str,
     duration: float,
     output_dir: Path,
+    profile: CoordinateMappingProfile | None = None,
 ) -> list[Path]:
     """Run the pipeline; return the list of files created (in order)."""
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -95,18 +93,19 @@ def run_demo(
 
     # 5. Export a map file (only if audio was provided) ----------------------
     print("[5/6] Exporting map...")
+    print(f"      coordinate profile : {profile.name if profile else 'none (normalized)'}")
     if audio is None:
         print("      (skipped — no --audio provided; map objects built in memory only)")
     else:
         synth_path = output_dir / "captured_dance.synth"
-        try:
-            written = write_synth(track, synth_path)
-            print(f"      wrote Synth Riders map: {written}")
-        except SynthExportUnavailable as exc:
-            written = write_normalized_json(track, synth_path.with_suffix(".normalized.json"))
-            print(f"      .synth unavailable ({exc})")
-            print(f"      wrote normalized draft instead: {written}")
-        created.append(written)
+        result = export_track(track, synth_path, profile)
+        print(f"      coordinates converted: {result.coordinates_converted}")
+        print(f"      export status      : {result.status}")
+        if result.status != "real_synth_written":
+            print("      (real .synth NOT written — see docs/COORDINATE_VERIFICATION.md)")
+        for path in result.files:
+            print(f"      wrote: {path}")
+            created.append(path)
 
     # 6. Report files created ------------------------------------------------
     print("[6/6] Done. Files created:")
@@ -123,16 +122,24 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--difficulty", default="Master")
     parser.add_argument("--duration", type=float, default=30.0)
     parser.add_argument("--output-dir", default="debug/demo")
+    parser.add_argument("--profile", default=None,
+                        help="JSON CoordinateMappingProfile applied at export")
     args = parser.parse_args(argv)
 
-    run_demo(
-        audio=args.audio,
-        bpm=args.bpm,
-        offset=args.offset,
-        difficulty=args.difficulty,
-        duration=args.duration,
-        output_dir=Path(args.output_dir),
-    )
+    profile = CoordinateMappingProfile.load(args.profile) if args.profile else None
+    try:
+        run_demo(
+            audio=args.audio,
+            bpm=args.bpm,
+            offset=args.offset,
+            difficulty=args.difficulty,
+            duration=args.duration,
+            output_dir=Path(args.output_dir),
+            profile=profile,
+        )
+    except ExportProfileError as exc:
+        print(f"ERROR: {exc}")
+        return 1
     return 0
 
 

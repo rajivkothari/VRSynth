@@ -24,9 +24,11 @@ verified profile.
 
 from __future__ import annotations
 
+import json
 import math
 from dataclasses import asdict, dataclass
-from typing import Any
+from pathlib import Path
+from typing import Any, Union
 
 __all__ = [
     "NORMALIZED_RANGE",
@@ -91,8 +93,30 @@ class CoordinateMappingProfile:
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
 
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "CoordinateMappingProfile":
+        return cls(
+            name=data["name"],
+            x_scale=data["x_scale"], y_scale=data["y_scale"], z_scale=data["z_scale"],
+            x_offset=data.get("x_offset", 0.0),
+            y_offset=data.get("y_offset", 0.0),
+            z_offset=data.get("z_offset", 0.0),
+            notes=data.get("notes", ""),
+        )
 
-# Identity / pass-through. Normalized space *is* the output space until a verified
+    def save(self, path: "Union[str, Path]") -> None:
+        """Write this profile to a JSON file."""
+        out = Path(path)
+        if out.parent and not out.parent.exists():
+            out.parent.mkdir(parents=True, exist_ok=True)
+        with out.open("w", encoding="utf-8") as handle:
+            json.dump(self.to_dict(), handle, ensure_ascii=False, indent=2)
+
+    @classmethod
+    def load(cls, path: "Union[str, Path]") -> "CoordinateMappingProfile":
+        """Load a profile from a JSON file written by :meth:`save`."""
+        with Path(path).open("r", encoding="utf-8") as handle:
+            return cls.from_dict(json.load(handle))
 # Synth Riders profile exists. This is the default everywhere.
 DEFAULT_NORMALIZED_PROFILE = CoordinateMappingProfile(
     name="default_normalized",

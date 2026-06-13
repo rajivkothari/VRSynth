@@ -16,10 +16,16 @@ from collections import Counter
 from pathlib import Path
 from typing import Optional
 
+from .coordinate_systems import CoordinateMappingProfile
 from .motion import MotionRecording, load_motion_recording
 from .motion_analysis import segment_motion
 from .motion_to_map import generate_notes_from_motion, generate_rails_from_motion
-from .smh_io import SynthExportUnavailable, TrackData, write_normalized_json, write_synth
+from .smh_io import (
+    EXPORT_NORMALIZED_JSON_ONLY,
+    ExportProfileError,
+    TrackData,
+    export_track,
+)
 
 DEFAULT_DIFFICULTY = "Master"
 
@@ -88,20 +94,21 @@ def cmd_motion_new(args: argparse.Namespace) -> int:
     )
     _print_summary(recording, track)
 
-    output = Path(args.output)
+    profile = CoordinateMappingProfile.load(args.profile) if args.profile else None
+    print(f"\ncoordinate profile : {profile.name if profile else 'none (normalized)'}")
     try:
-        written = write_synth(track, output)
-        print(f"\nWrote Synth Riders map to {written}")
-    except SynthExportUnavailable as exc:
-        fallback = output.with_suffix(".normalized.json")
-        written = write_normalized_json(track, fallback)
-        print(f"\n.synth export unavailable: {exc}")
-        print(f"Wrote normalized map (rails + notes) to {written}")
-        print(
-            "This JSON is in normalized coordinate space; converting to real "
-            ".synth units needs a verified coordinate profile "
-            "(see docs/VR_CHOREOGRAPHY_CAPTURE.md 8.7)."
-        )
+        result = export_track(track, Path(args.output), profile)
+    except ExportProfileError as exc:
+        print(f"ERROR: {exc}")
+        return 1
+
+    print(f"coordinates converted: {result.coordinates_converted}")
+    print(f"export status      : {result.status}")
+    for path in result.files:
+        print(f"wrote: {path}")
+    if result.status == EXPORT_NORMALIZED_JSON_ONLY:
+        print("(normalized coordinate space; real .synth needs a verified profile "
+              "— see docs/COORDINATE_VERIFICATION.md)")
     return 0
 
 
@@ -128,6 +135,11 @@ def build_parser() -> argparse.ArgumentParser:
     mn.add_argument("--offset", type=float, default=None, help="override song offset (s)")
     mn.add_argument("--difficulty", default=DEFAULT_DIFFICULTY)
     mn.add_argument("--output", default="captured_dance.synth", help="output path")
+    mn.add_argument(
+        "--profile", default=None,
+        help="JSON CoordinateMappingProfile; applied at the export boundary "
+             "(omit to keep normalized output)",
+    )
     mn.set_defaults(func=cmd_motion_new)
 
     nw = sub.add_parser(

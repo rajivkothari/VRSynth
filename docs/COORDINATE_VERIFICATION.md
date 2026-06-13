@@ -18,13 +18,14 @@ maps that land where the dancer actually moved.
 |------|---------------|
 | 1–3 Make & export a test map | manual, in the official editor |
 | 4 Inspect the `.synth` | ✅ `tools/inspect_synth_coordinates.py` works today |
-| 5 Create a verified profile | ⏳ manual code edit in `synthcopilot/coordinate_systems.py` |
-| 6 Re-run with the profile | ⏳ **not wired yet** — needs a real `.synth` writer + a `--profile` flag (see "Pending work") |
-| 7 Import & visually confirm | manual, in the editor |
+| 5 Create a verified profile | ✅ author + `CoordinateMappingProfile.save/load` (JSON), or edit `coordinate_systems.py` |
+| 6 Re-run with the profile | ◐ **profile flag + conversion boundary wired**; the real `.synth` writer is still pending (see "Pending work"). With a valid profile the pipeline now converts coordinates and writes a synth-space *preview*, status `profile_applied_no_real_writer`. |
+| 7 Import & visually confirm | ⏳ blocked on the real `.synth` writer |
 
-So today you can complete steps 1–5 (measure and propose a profile). Steps 6–7
-need the small amount of implementation listed at the bottom before the loop can
-be closed end-to-end.
+So today you can complete steps 1–5 fully, and step 6 up to the conversion
+boundary (coordinates are pushed through the profile and a synth-space preview is
+written). Importing into the editor (step 7) still needs the real `.synth` writer
+— the last item in "Pending work".
 
 ---
 
@@ -95,13 +96,23 @@ SYNTH_RIDERS_PROFILE_V1 = CoordinateMappingProfile(
 the `notes` until step 7 passes.**
 
 ### 6. Re-run the pipeline with the verified profile
-Regenerate a map from motion and export it through the profile:
+Save the profile to JSON (`CoordinateMappingProfile.save(...)`), then pass it via
+`--profile` to either entry point:
 ```bash
-# (target command once the writer accepts a profile — see "Pending work")
-python3 tools/demo_motion_pipeline.py --audio song.ogg --bpm 123  # + a profile flag
+python3 tools/demo_motion_pipeline.py --audio song.ogg --bpm 123 --profile profile.json
+# or
+python3 -m synthcopilot motion-new --motion take.json --audio song.ogg \
+    --bpm 123 --profile profile.json --output captured_dance.synth
 ```
-This step is **not wired yet**: the export path (`smh_io.write_synth`) does not
-emit a real `.synth` and nothing accepts a profile flag. See "Pending work".
+What happens now (the boundary is wired):
+- **No `--profile`** → writes the normalized-JSON draft; status `normalized_json_only`.
+- **Invalid profile** → hard fails with a clear error (never exports a broken map).
+- **Valid profile** → every `Note`/`RailNode` is converted via
+  `normalized_to_synth(point, profile)` and a **synth-space preview**
+  (`*.synth_space.json`) is written; status `profile_applied_no_real_writer`.
+
+The status is **never** `real_synth_written` yet — the real `.synth` writer is the
+remaining pending item, so step 7 (editor import) is still blocked.
 
 ### 7. Import the generated map into the editor and confirm placement
 Open the exported map in the Synth Riders editor and **look at it**:
@@ -162,17 +173,21 @@ the pipeline must keep emitting the normalized-coordinate draft.
 
 ---
 
-## Pending work (to make steps 6–7 runnable)
-These are the only code pieces between "measured" and "closed loop":
+## Pending work (to make step 7 runnable)
 
 1. **A real `.synth` writer.** `synthcopilot/smh_io.write_synth` currently raises
-   `SynthExportUnavailable`. It needs to: map each normalized `Note`/`RailNode`
-   through `normalized_to_synth(profile)` into `SynthPoint`s, and write the editor
-   `.synth` format (a ZIP with a `beatmap.meta.bin` JSON beatmap — the same format
-   `tools/inspect_synth_coordinates.py` reads). `synth_mapping_helper` can do the
-   zip/format work if installed, or it can be written directly.
-2. **A profile flag.** `tools/demo_motion_pipeline.py` (and the `motion-new` CLI)
-   should accept a verified profile (e.g. `--profile`) and pass it to
-   `write_synth`; the default stays `DEFAULT_NORMALIZED_PROFILE` (normalized JSON).
-3. (Optional) A tiny loader so the verified profile can live in a JSON file rather
-   than only in code.
+   `SynthExportUnavailable`. It needs to write the editor `.synth` format (a ZIP
+   with a `beatmap.meta.bin` JSON beatmap — the same format
+   `tools/inspect_synth_coordinates.py` reads), consuming the synth-space points
+   the boundary already produces. `synth_mapping_helper` can do the zip/format
+   work if installed, or it can be written directly. When this lands,
+   `export_track` returns `real_synth_written` and step 7 becomes possible.
+
+   _Done in this pass:_
+   - ✅ **Profile flag** — `tools/demo_motion_pipeline.py` and the `motion-new`
+     CLI accept `--profile path.json`.
+   - ✅ **Profile JSON I/O** — `CoordinateMappingProfile.save/load`.
+   - ✅ **Conversion boundary** — `smh_io.export_track` applies the profile (via
+     `normalized_to_synth`) with explicit statuses (`normalized_json_only`,
+     `profile_applied_no_real_writer`, `real_synth_written`) and hard-fails on an
+     invalid profile. Real `.synth` writing stays gated.
