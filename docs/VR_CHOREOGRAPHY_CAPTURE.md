@@ -534,6 +534,20 @@ circle at the start and a square at the end. Pass `--no-time-color` for solid
 lines. The visualizer reads the same `MotionRecording` JSON that real capture
 will write, so it works unchanged once hardware capture lands.
 
+**Analyze a recording** (stdlib only — the Product B "evaluator/debug report"):
+
+```bash
+python3 tools/analyze_motion.py \
+    --input debug/fake_motion_recording.json \
+    --output debug/motion_report.json
+```
+
+This runs the analysis pipeline (smooth → velocities → `segment_motion`), prints
+a human-readable summary, and saves a JSON report containing: duration, sample
+rate, average/peak hand speed (left, right, combined), segment count, per-
+primitive counts, and a time-ordered timeline of detected movement segments. It
+reports *choreography intent only* — no Synth Riders notes are produced.
+
 ---
 
 ## 8. How Captured Movement Becomes Notes, Rails, and Walls

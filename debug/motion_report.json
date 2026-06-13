@@ -1,0 +1,2222 @@
+{
+  "report_version": "0.1.0",
+  "source": "debug/fake_motion_recording.json",
+  "song_path": "songs/fake_song_segment.mp3",
+  "duration_seconds": 29.9833,
+  "sample_rate": 60.0,
+  "frame_count": 1800,
+  "bpm": 120.0,
+  "offset": 0.0,
+  "hand_speed": {
+    "left": {
+      "average": 0.689,
+      "peak": 1.948
+    },
+    "right": {
+      "average": 0.6748,
+      "peak": 1.9257
+    },
+    "combined": {
+      "average": 0.6819,
+      "peak": 1.948
+    }
+  },
+  "segment_count": 272,
+  "primitive_counts": {
+    "circular_motion": 10,
+    "downward_drop": 58,
+    "left_sweep": 29,
+    "right_sweep": 30,
+    "still": 54,
+    "two_hand_contraction": 16,
+    "two_hand_expansion": 17,
+    "upward_lift": 58
+  },
+  "hand_counts": {
+    "both": 33,
+    "head": 119,
+    "left": 60,
+    "right": 60
+  },
+  "timeline": [
+    {
+      "start_time": 0.0,
+      "end_time": 0.3667,
+      "duration": 0.3667,
+      "hand": "left",
+      "primitive_name": "left_sweep",
+      "confidence": 0.9004
+    },
+    {
+      "start_time": 0.0,
+      "end_time": 0.3667,
+      "duration": 0.3667,
+      "hand": "right",
+      "primitive_name": "right_sweep",
+      "confidence": 0.9005
+    },
+    {
+      "start_time": 0.0,
+      "end_time": 0.4333,
+      "duration": 0.4333,
+      "hand": "both",
+      "primitive_name": "two_hand_expansion",
+      "confidence": 0.9204
+    },
+    {
+      "start_time": 0.0,
+      "end_time": 3.1,
+      "duration": 3.1,
+      "hand": "right",
+      "primitive_name": "circular_motion",
+      "confidence": 0.6646
+    },
+    {
+      "start_time": 0.0,
+      "end_time": 4.1833,
+      "duration": 4.1833,
+      "hand": "left",
+      "primitive_name": "circular_motion",
+      "confidence": 0.6782
+    },
+    {
+      "start_time": 0.1667,
+      "end_time": 0.3167,
+      "duration": 0.15,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.2363
+    },
+    {
+      "start_time": 0.3333,
+      "end_time": 0.55,
+      "duration": 0.2167,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.9784
+    },
+    {
+      "start_time": 0.3833,
+      "end_time": 0.6167,
+      "duration": 0.2333,
+      "hand": "left",
+      "primitive_name": "downward_drop",
+      "confidence": 0.854
+    },
+    {
+      "start_time": 0.3833,
+      "end_time": 0.6167,
+      "duration": 0.2333,
+      "hand": "right",
+      "primitive_name": "upward_lift",
+      "confidence": 0.7892
+    },
+    {
+      "start_time": 0.5667,
+      "end_time": 0.7667,
+      "duration": 0.2,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.3026
+    },
+    {
+      "start_time": 0.5667,
+      "end_time": 1.4667,
+      "duration": 0.9,
+      "hand": "both",
+      "primitive_name": "two_hand_contraction",
+      "confidence": 0.9441
+    },
+    {
+      "start_time": 0.6333,
+      "end_time": 1.3667,
+      "duration": 0.7333,
+      "hand": "left",
+      "primitive_name": "right_sweep",
+      "confidence": 0.8794
+    },
+    {
+      "start_time": 0.6333,
+      "end_time": 1.3667,
+      "duration": 0.7333,
+      "hand": "right",
+      "primitive_name": "left_sweep",
+      "confidence": 0.8863
+    },
+    {
+      "start_time": 0.7833,
+      "end_time": 1.0333,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8223
+    },
+    {
+      "start_time": 1.0833,
+      "end_time": 1.2167,
+      "duration": 0.1333,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.1372
+    },
+    {
+      "start_time": 1.2333,
+      "end_time": 1.4667,
+      "duration": 0.2333,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.9395
+    },
+    {
+      "start_time": 1.3833,
+      "end_time": 1.6167,
+      "duration": 0.2333,
+      "hand": "left",
+      "primitive_name": "downward_drop",
+      "confidence": 0.7978
+    },
+    {
+      "start_time": 1.3833,
+      "end_time": 1.6167,
+      "duration": 0.2333,
+      "hand": "right",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8851
+    },
+    {
+      "start_time": 1.4833,
+      "end_time": 1.6833,
+      "duration": 0.2,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.4262
+    },
+    {
+      "start_time": 1.55,
+      "end_time": 2.5167,
+      "duration": 0.9667,
+      "hand": "both",
+      "primitive_name": "two_hand_expansion",
+      "confidence": 0.947
+    },
+    {
+      "start_time": 1.6333,
+      "end_time": 2.2333,
+      "duration": 0.6,
+      "hand": "right",
+      "primitive_name": "right_sweep",
+      "confidence": 0.8707
+    },
+    {
+      "start_time": 1.6333,
+      "end_time": 2.3667,
+      "duration": 0.7333,
+      "hand": "left",
+      "primitive_name": "left_sweep",
+      "confidence": 0.8924
+    },
+    {
+      "start_time": 1.7,
+      "end_time": 1.95,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8494
+    },
+    {
+      "start_time": 2.1333,
+      "end_time": 2.3833,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.8868
+    },
+    {
+      "start_time": 2.3833,
+      "end_time": 2.6167,
+      "duration": 0.2333,
+      "hand": "left",
+      "primitive_name": "downward_drop",
+      "confidence": 0.8924
+    },
+    {
+      "start_time": 2.4,
+      "end_time": 2.6,
+      "duration": 0.2,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.4955
+    },
+    {
+      "start_time": 2.6,
+      "end_time": 3.3833,
+      "duration": 0.7833,
+      "hand": "both",
+      "primitive_name": "two_hand_contraction",
+      "confidence": 1.0
+    },
+    {
+      "start_time": 2.6167,
+      "end_time": 2.8667,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8868
+    },
+    {
+      "start_time": 2.6333,
+      "end_time": 3.3667,
+      "duration": 0.7333,
+      "hand": "left",
+      "primitive_name": "right_sweep",
+      "confidence": 0.8814
+    },
+    {
+      "start_time": 2.95,
+      "end_time": 3.3167,
+      "duration": 0.3667,
+      "hand": "right",
+      "primitive_name": "left_sweep",
+      "confidence": 0.8525
+    },
+    {
+      "start_time": 3.05,
+      "end_time": 3.3,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.8494
+    },
+    {
+      "start_time": 3.3167,
+      "end_time": 3.5167,
+      "duration": 0.2,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.4262
+    },
+    {
+      "start_time": 3.3333,
+      "end_time": 3.6,
+      "duration": 0.2667,
+      "hand": "right",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8683
+    },
+    {
+      "start_time": 3.4833,
+      "end_time": 4.4,
+      "duration": 0.9167,
+      "hand": "both",
+      "primitive_name": "two_hand_expansion",
+      "confidence": 1.0
+    },
+    {
+      "start_time": 3.5,
+      "end_time": 4.3667,
+      "duration": 0.8667,
+      "hand": "left",
+      "primitive_name": "left_sweep",
+      "confidence": 0.8747
+    },
+    {
+      "start_time": 3.5333,
+      "end_time": 3.7667,
+      "duration": 0.2333,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.9395
+    },
+    {
+      "start_time": 3.6167,
+      "end_time": 4.3667,
+      "duration": 0.75,
+      "hand": "right",
+      "primitive_name": "right_sweep",
+      "confidence": 0.9143
+    },
+    {
+      "start_time": 3.7833,
+      "end_time": 3.9167,
+      "duration": 0.1333,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.1372
+    },
+    {
+      "start_time": 3.9667,
+      "end_time": 4.2167,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.8223
+    },
+    {
+      "start_time": 4.2333,
+      "end_time": 4.4333,
+      "duration": 0.2,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.3026
+    },
+    {
+      "start_time": 4.3833,
+      "end_time": 4.6,
+      "duration": 0.2167,
+      "hand": "left",
+      "primitive_name": "downward_drop",
+      "confidence": 0.8614
+    },
+    {
+      "start_time": 4.45,
+      "end_time": 4.6667,
+      "duration": 0.2167,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.9784
+    },
+    {
+      "start_time": 4.4833,
+      "end_time": 5.3833,
+      "duration": 0.9,
+      "hand": "both",
+      "primitive_name": "two_hand_contraction",
+      "confidence": 1.0
+    },
+    {
+      "start_time": 4.5,
+      "end_time": 5.4333,
+      "duration": 0.9333,
+      "hand": "right",
+      "primitive_name": "left_sweep",
+      "confidence": 0.8674
+    },
+    {
+      "start_time": 4.6167,
+      "end_time": 5.3,
+      "duration": 0.6833,
+      "hand": "left",
+      "primitive_name": "right_sweep",
+      "confidence": 0.9007
+    },
+    {
+      "start_time": 4.6833,
+      "end_time": 4.8333,
+      "duration": 0.15,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.2363
+    },
+    {
+      "start_time": 4.8333,
+      "end_time": 10.5833,
+      "duration": 5.75,
+      "hand": "right",
+      "primitive_name": "circular_motion",
+      "confidence": 0.6901
+    },
+    {
+      "start_time": 4.8667,
+      "end_time": 5.1333,
+      "duration": 0.2667,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.805
+    },
+    {
+      "start_time": 5.1667,
+      "end_time": 5.3167,
+      "duration": 0.15,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.2363
+    },
+    {
+      "start_time": 5.3333,
+      "end_time": 5.55,
+      "duration": 0.2167,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.9784
+    },
+    {
+      "start_time": 5.4333,
+      "end_time": 5.6667,
+      "duration": 0.2333,
+      "hand": "both",
+      "primitive_name": "two_hand_expansion",
+      "confidence": 1.0
+    },
+    {
+      "start_time": 5.45,
+      "end_time": 5.6167,
+      "duration": 0.1667,
+      "hand": "right",
+      "primitive_name": "upward_lift",
+      "confidence": 0.775
+    },
+    {
+      "start_time": 5.5667,
+      "end_time": 5.7667,
+      "duration": 0.2,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.3026
+    },
+    {
+      "start_time": 5.6333,
+      "end_time": 6.3667,
+      "duration": 0.7333,
+      "hand": "right",
+      "primitive_name": "right_sweep",
+      "confidence": 0.8843
+    },
+    {
+      "start_time": 5.7833,
+      "end_time": 6.0333,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.8223
+    },
+    {
+      "start_time": 5.8833,
+      "end_time": 6.4333,
+      "duration": 0.55,
+      "hand": "both",
+      "primitive_name": "two_hand_expansion",
+      "confidence": 0.9611
+    },
+    {
+      "start_time": 5.95,
+      "end_time": 9.6,
+      "duration": 3.65,
+      "hand": "left",
+      "primitive_name": "circular_motion",
+      "confidence": 0.8024
+    },
+    {
+      "start_time": 6.0167,
+      "end_time": 6.3667,
+      "duration": 0.35,
+      "hand": "left",
+      "primitive_name": "left_sweep",
+      "confidence": 0.8716
+    },
+    {
+      "start_time": 6.0833,
+      "end_time": 6.2167,
+      "duration": 0.1333,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.1372
+    },
+    {
+      "start_time": 6.2333,
+      "end_time": 6.4667,
+      "duration": 0.2333,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.9395
+    },
+    {
+      "start_time": 6.3833,
+      "end_time": 6.6167,
+      "duration": 0.2333,
+      "hand": "left",
+      "primitive_name": "downward_drop",
+      "confidence": 0.7978
+    },
+    {
+      "start_time": 6.3833,
+      "end_time": 6.6167,
+      "duration": 0.2333,
+      "hand": "right",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8851
+    },
+    {
+      "start_time": 6.4833,
+      "end_time": 6.6833,
+      "duration": 0.2,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.4262
+    },
+    {
+      "start_time": 6.5667,
+      "end_time": 7.45,
+      "duration": 0.8833,
+      "hand": "both",
+      "primitive_name": "two_hand_contraction",
+      "confidence": 0.9597
+    },
+    {
+      "start_time": 6.6333,
+      "end_time": 7.3667,
+      "duration": 0.7333,
+      "hand": "left",
+      "primitive_name": "right_sweep",
+      "confidence": 0.8924
+    },
+    {
+      "start_time": 6.6333,
+      "end_time": 7.3667,
+      "duration": 0.7333,
+      "hand": "right",
+      "primitive_name": "left_sweep",
+      "confidence": 0.8979
+    },
+    {
+      "start_time": 6.7,
+      "end_time": 6.95,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.8494
+    },
+    {
+      "start_time": 7.1333,
+      "end_time": 7.3833,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8868
+    },
+    {
+      "start_time": 7.3833,
+      "end_time": 7.6167,
+      "duration": 0.2333,
+      "hand": "left",
+      "primitive_name": "downward_drop",
+      "confidence": 0.8924
+    },
+    {
+      "start_time": 7.3833,
+      "end_time": 7.6167,
+      "duration": 0.2333,
+      "hand": "right",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8167
+    },
+    {
+      "start_time": 7.4,
+      "end_time": 7.6,
+      "duration": 0.2,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.4955
+    },
+    {
+      "start_time": 7.5333,
+      "end_time": 8.4333,
+      "duration": 0.9,
+      "hand": "both",
+      "primitive_name": "two_hand_expansion",
+      "confidence": 0.9481
+    },
+    {
+      "start_time": 7.6167,
+      "end_time": 7.8667,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.8868
+    },
+    {
+      "start_time": 7.6333,
+      "end_time": 8.3667,
+      "duration": 0.7333,
+      "hand": "left",
+      "primitive_name": "left_sweep",
+      "confidence": 0.8933
+    },
+    {
+      "start_time": 7.6333,
+      "end_time": 8.3667,
+      "duration": 0.7333,
+      "hand": "right",
+      "primitive_name": "right_sweep",
+      "confidence": 0.8774
+    },
+    {
+      "start_time": 8.05,
+      "end_time": 8.3,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8494
+    },
+    {
+      "start_time": 8.3167,
+      "end_time": 8.5167,
+      "duration": 0.2,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.4262
+    },
+    {
+      "start_time": 8.3833,
+      "end_time": 8.6167,
+      "duration": 0.2333,
+      "hand": "left",
+      "primitive_name": "downward_drop",
+      "confidence": 0.7877
+    },
+    {
+      "start_time": 8.3833,
+      "end_time": 8.6333,
+      "duration": 0.25,
+      "hand": "right",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8296
+    },
+    {
+      "start_time": 8.5333,
+      "end_time": 8.7667,
+      "duration": 0.2333,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.9395
+    },
+    {
+      "start_time": 8.5833,
+      "end_time": 9.2667,
+      "duration": 0.6833,
+      "hand": "both",
+      "primitive_name": "two_hand_contraction",
+      "confidence": 0.7868
+    },
+    {
+      "start_time": 8.6333,
+      "end_time": 9.0167,
+      "duration": 0.3833,
+      "hand": "left",
+      "primitive_name": "right_sweep",
+      "confidence": 0.8228
+    },
+    {
+      "start_time": 8.65,
+      "end_time": 9.2167,
+      "duration": 0.5667,
+      "hand": "right",
+      "primitive_name": "left_sweep",
+      "confidence": 0.9097
+    },
+    {
+      "start_time": 8.7833,
+      "end_time": 8.9167,
+      "duration": 0.1333,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.1372
+    },
+    {
+      "start_time": 8.9667,
+      "end_time": 9.2167,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8223
+    },
+    {
+      "start_time": 9.0333,
+      "end_time": 9.35,
+      "duration": 0.3167,
+      "hand": "left",
+      "primitive_name": "upward_lift",
+      "confidence": 0.7779
+    },
+    {
+      "start_time": 9.2333,
+      "end_time": 9.4333,
+      "duration": 0.2,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.3026
+    },
+    {
+      "start_time": 9.2333,
+      "end_time": 9.6167,
+      "duration": 0.3833,
+      "hand": "right",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8827
+    },
+    {
+      "start_time": 9.3667,
+      "end_time": 10.2,
+      "duration": 0.8333,
+      "hand": "left",
+      "primitive_name": "left_sweep",
+      "confidence": 0.9149
+    },
+    {
+      "start_time": 9.4,
+      "end_time": 10.2167,
+      "duration": 0.8167,
+      "hand": "both",
+      "primitive_name": "two_hand_expansion",
+      "confidence": 1.0
+    },
+    {
+      "start_time": 9.45,
+      "end_time": 9.6667,
+      "duration": 0.2167,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.9784
+    },
+    {
+      "start_time": 9.6833,
+      "end_time": 9.8333,
+      "duration": 0.15,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.2363
+    },
+    {
+      "start_time": 9.8667,
+      "end_time": 10.1333,
+      "duration": 0.2667,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.805
+    },
+    {
+      "start_time": 10.1667,
+      "end_time": 10.3167,
+      "duration": 0.15,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.2363
+    },
+    {
+      "start_time": 10.2167,
+      "end_time": 10.6,
+      "duration": 0.3833,
+      "hand": "left",
+      "primitive_name": "downward_drop",
+      "confidence": 0.8713
+    },
+    {
+      "start_time": 10.3333,
+      "end_time": 10.55,
+      "duration": 0.2167,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.9784
+    },
+    {
+      "start_time": 10.35,
+      "end_time": 11.4667,
+      "duration": 1.1167,
+      "hand": "both",
+      "primitive_name": "two_hand_contraction",
+      "confidence": 1.0
+    },
+    {
+      "start_time": 10.3833,
+      "end_time": 11.3833,
+      "duration": 1.0,
+      "hand": "right",
+      "primitive_name": "left_sweep",
+      "confidence": 0.8771
+    },
+    {
+      "start_time": 10.5667,
+      "end_time": 10.7667,
+      "duration": 0.2,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.3026
+    },
+    {
+      "start_time": 10.6167,
+      "end_time": 11.3667,
+      "duration": 0.75,
+      "hand": "left",
+      "primitive_name": "right_sweep",
+      "confidence": 0.9053
+    },
+    {
+      "start_time": 10.7833,
+      "end_time": 11.0333,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8223
+    },
+    {
+      "start_time": 10.85,
+      "end_time": 18.55,
+      "duration": 7.7,
+      "hand": "right",
+      "primitive_name": "circular_motion",
+      "confidence": 0.6721
+    },
+    {
+      "start_time": 11.0,
+      "end_time": 17.3,
+      "duration": 6.3,
+      "hand": "left",
+      "primitive_name": "circular_motion",
+      "confidence": 0.6921
+    },
+    {
+      "start_time": 11.0833,
+      "end_time": 11.2167,
+      "duration": 0.1333,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.1372
+    },
+    {
+      "start_time": 11.2333,
+      "end_time": 11.4667,
+      "duration": 0.2333,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.9395
+    },
+    {
+      "start_time": 11.3833,
+      "end_time": 11.6167,
+      "duration": 0.2333,
+      "hand": "left",
+      "primitive_name": "downward_drop",
+      "confidence": 0.8056
+    },
+    {
+      "start_time": 11.4,
+      "end_time": 11.6167,
+      "duration": 0.2167,
+      "hand": "right",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8934
+    },
+    {
+      "start_time": 11.4833,
+      "end_time": 11.6833,
+      "duration": 0.2,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.4262
+    },
+    {
+      "start_time": 11.55,
+      "end_time": 12.4333,
+      "duration": 0.8833,
+      "hand": "both",
+      "primitive_name": "two_hand_expansion",
+      "confidence": 0.9561
+    },
+    {
+      "start_time": 11.6333,
+      "end_time": 12.3667,
+      "duration": 0.7333,
+      "hand": "left",
+      "primitive_name": "left_sweep",
+      "confidence": 0.8915
+    },
+    {
+      "start_time": 11.6333,
+      "end_time": 12.3667,
+      "duration": 0.7333,
+      "hand": "right",
+      "primitive_name": "right_sweep",
+      "confidence": 0.8978
+    },
+    {
+      "start_time": 11.7,
+      "end_time": 11.95,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8494
+    },
+    {
+      "start_time": 12.1333,
+      "end_time": 12.3833,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.8868
+    },
+    {
+      "start_time": 12.3833,
+      "end_time": 12.6167,
+      "duration": 0.2333,
+      "hand": "left",
+      "primitive_name": "downward_drop",
+      "confidence": 0.8924
+    },
+    {
+      "start_time": 12.3833,
+      "end_time": 12.6167,
+      "duration": 0.2333,
+      "hand": "right",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8167
+    },
+    {
+      "start_time": 12.4,
+      "end_time": 12.6,
+      "duration": 0.2,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.4955
+    },
+    {
+      "start_time": 12.5833,
+      "end_time": 13.4667,
+      "duration": 0.8833,
+      "hand": "both",
+      "primitive_name": "two_hand_contraction",
+      "confidence": 0.9537
+    },
+    {
+      "start_time": 12.6167,
+      "end_time": 12.8667,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8868
+    },
+    {
+      "start_time": 12.6333,
+      "end_time": 13.3667,
+      "duration": 0.7333,
+      "hand": "left",
+      "primitive_name": "right_sweep",
+      "confidence": 0.8924
+    },
+    {
+      "start_time": 12.6333,
+      "end_time": 13.3667,
+      "duration": 0.7333,
+      "hand": "right",
+      "primitive_name": "left_sweep",
+      "confidence": 0.8773
+    },
+    {
+      "start_time": 13.05,
+      "end_time": 13.3,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.8494
+    },
+    {
+      "start_time": 13.3167,
+      "end_time": 13.5167,
+      "duration": 0.2,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.4262
+    },
+    {
+      "start_time": 13.3833,
+      "end_time": 13.55,
+      "duration": 0.1667,
+      "hand": "left",
+      "primitive_name": "downward_drop",
+      "confidence": 0.7793
+    },
+    {
+      "start_time": 13.3833,
+      "end_time": 13.6167,
+      "duration": 0.2333,
+      "hand": "right",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8276
+    },
+    {
+      "start_time": 13.5333,
+      "end_time": 13.7667,
+      "duration": 0.2333,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.9395
+    },
+    {
+      "start_time": 13.55,
+      "end_time": 14.4167,
+      "duration": 0.8667,
+      "hand": "both",
+      "primitive_name": "two_hand_expansion",
+      "confidence": 0.9697
+    },
+    {
+      "start_time": 13.6333,
+      "end_time": 14.3667,
+      "duration": 0.7333,
+      "hand": "right",
+      "primitive_name": "right_sweep",
+      "confidence": 0.8997
+    },
+    {
+      "start_time": 13.7833,
+      "end_time": 13.9167,
+      "duration": 0.1333,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.1372
+    },
+    {
+      "start_time": 13.9667,
+      "end_time": 14.2167,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.8223
+    },
+    {
+      "start_time": 14.2333,
+      "end_time": 14.4333,
+      "duration": 0.2,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.3026
+    },
+    {
+      "start_time": 14.3833,
+      "end_time": 14.6167,
+      "duration": 0.2333,
+      "hand": "right",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8774
+    },
+    {
+      "start_time": 14.45,
+      "end_time": 14.6667,
+      "duration": 0.2167,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.9784
+    },
+    {
+      "start_time": 14.4667,
+      "end_time": 14.6167,
+      "duration": 0.15,
+      "hand": "left",
+      "primitive_name": "downward_drop",
+      "confidence": 0.8427
+    },
+    {
+      "start_time": 14.5667,
+      "end_time": 15.45,
+      "duration": 0.8833,
+      "hand": "both",
+      "primitive_name": "two_hand_contraction",
+      "confidence": 0.9553
+    },
+    {
+      "start_time": 14.6333,
+      "end_time": 15.3667,
+      "duration": 0.7333,
+      "hand": "left",
+      "primitive_name": "right_sweep",
+      "confidence": 0.9013
+    },
+    {
+      "start_time": 14.6333,
+      "end_time": 15.3667,
+      "duration": 0.7333,
+      "hand": "right",
+      "primitive_name": "left_sweep",
+      "confidence": 0.8838
+    },
+    {
+      "start_time": 14.6833,
+      "end_time": 14.8333,
+      "duration": 0.15,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.2363
+    },
+    {
+      "start_time": 14.8667,
+      "end_time": 15.1333,
+      "duration": 0.2667,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.805
+    },
+    {
+      "start_time": 15.1667,
+      "end_time": 15.3167,
+      "duration": 0.15,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.2363
+    },
+    {
+      "start_time": 15.3333,
+      "end_time": 15.55,
+      "duration": 0.2167,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.9784
+    },
+    {
+      "start_time": 15.3833,
+      "end_time": 15.6167,
+      "duration": 0.2333,
+      "hand": "left",
+      "primitive_name": "downward_drop",
+      "confidence": 0.854
+    },
+    {
+      "start_time": 15.3833,
+      "end_time": 15.6167,
+      "duration": 0.2333,
+      "hand": "right",
+      "primitive_name": "upward_lift",
+      "confidence": 0.7892
+    },
+    {
+      "start_time": 15.5333,
+      "end_time": 16.4333,
+      "duration": 0.9,
+      "hand": "both",
+      "primitive_name": "two_hand_expansion",
+      "confidence": 0.9428
+    },
+    {
+      "start_time": 15.5667,
+      "end_time": 15.7667,
+      "duration": 0.2,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.3026
+    },
+    {
+      "start_time": 15.6333,
+      "end_time": 16.3667,
+      "duration": 0.7333,
+      "hand": "left",
+      "primitive_name": "left_sweep",
+      "confidence": 0.8799
+    },
+    {
+      "start_time": 15.6333,
+      "end_time": 16.3667,
+      "duration": 0.7333,
+      "hand": "right",
+      "primitive_name": "right_sweep",
+      "confidence": 0.8864
+    },
+    {
+      "start_time": 15.7833,
+      "end_time": 16.0333,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.8223
+    },
+    {
+      "start_time": 16.0833,
+      "end_time": 16.2167,
+      "duration": 0.1333,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.1372
+    },
+    {
+      "start_time": 16.2333,
+      "end_time": 16.4667,
+      "duration": 0.2333,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.9395
+    },
+    {
+      "start_time": 16.3833,
+      "end_time": 16.6167,
+      "duration": 0.2333,
+      "hand": "left",
+      "primitive_name": "downward_drop",
+      "confidence": 0.7958
+    },
+    {
+      "start_time": 16.3833,
+      "end_time": 16.6333,
+      "duration": 0.25,
+      "hand": "right",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8759
+    },
+    {
+      "start_time": 16.4833,
+      "end_time": 16.6833,
+      "duration": 0.2,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.4262
+    },
+    {
+      "start_time": 16.5833,
+      "end_time": 17.3333,
+      "duration": 0.75,
+      "hand": "both",
+      "primitive_name": "two_hand_contraction",
+      "confidence": 0.778
+    },
+    {
+      "start_time": 16.6333,
+      "end_time": 17.1667,
+      "duration": 0.5333,
+      "hand": "left",
+      "primitive_name": "right_sweep",
+      "confidence": 0.8141
+    },
+    {
+      "start_time": 16.7,
+      "end_time": 16.95,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.8494
+    },
+    {
+      "start_time": 17.1333,
+      "end_time": 17.3833,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8868
+    },
+    {
+      "start_time": 17.4,
+      "end_time": 17.6,
+      "duration": 0.2,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.4955
+    },
+    {
+      "start_time": 17.4167,
+      "end_time": 17.6,
+      "duration": 0.1833,
+      "hand": "right",
+      "primitive_name": "upward_lift",
+      "confidence": 0.7865
+    },
+    {
+      "start_time": 17.4167,
+      "end_time": 18.2333,
+      "duration": 0.8167,
+      "hand": "left",
+      "primitive_name": "left_sweep",
+      "confidence": 0.9098
+    },
+    {
+      "start_time": 17.4167,
+      "end_time": 18.2667,
+      "duration": 0.85,
+      "hand": "both",
+      "primitive_name": "two_hand_expansion",
+      "confidence": 1.0
+    },
+    {
+      "start_time": 17.6167,
+      "end_time": 17.8667,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.8868
+    },
+    {
+      "start_time": 17.6167,
+      "end_time": 18.2,
+      "duration": 0.5833,
+      "hand": "right",
+      "primitive_name": "right_sweep",
+      "confidence": 0.8882
+    },
+    {
+      "start_time": 18.05,
+      "end_time": 18.3,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8494
+    },
+    {
+      "start_time": 18.2167,
+      "end_time": 18.35,
+      "duration": 0.1333,
+      "hand": "right",
+      "primitive_name": "downward_drop",
+      "confidence": 0.7851
+    },
+    {
+      "start_time": 18.25,
+      "end_time": 18.6,
+      "duration": 0.35,
+      "hand": "left",
+      "primitive_name": "downward_drop",
+      "confidence": 0.8899
+    },
+    {
+      "start_time": 18.3167,
+      "end_time": 18.5167,
+      "duration": 0.2,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.4262
+    },
+    {
+      "start_time": 18.3667,
+      "end_time": 19.3833,
+      "duration": 1.0167,
+      "hand": "right",
+      "primitive_name": "left_sweep",
+      "confidence": 0.9049
+    },
+    {
+      "start_time": 18.3667,
+      "end_time": 19.4667,
+      "duration": 1.1,
+      "hand": "both",
+      "primitive_name": "two_hand_contraction",
+      "confidence": 1.0
+    },
+    {
+      "start_time": 18.5333,
+      "end_time": 18.7667,
+      "duration": 0.2333,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.9395
+    },
+    {
+      "start_time": 18.6167,
+      "end_time": 19.3667,
+      "duration": 0.75,
+      "hand": "left",
+      "primitive_name": "right_sweep",
+      "confidence": 0.9132
+    },
+    {
+      "start_time": 18.7833,
+      "end_time": 18.9167,
+      "duration": 0.1333,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.1372
+    },
+    {
+      "start_time": 18.85,
+      "end_time": 23.1167,
+      "duration": 4.2667,
+      "hand": "right",
+      "primitive_name": "circular_motion",
+      "confidence": 0.6655
+    },
+    {
+      "start_time": 18.9333,
+      "end_time": 24.1833,
+      "duration": 5.25,
+      "hand": "left",
+      "primitive_name": "circular_motion",
+      "confidence": 0.6869
+    },
+    {
+      "start_time": 18.9667,
+      "end_time": 19.2167,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8223
+    },
+    {
+      "start_time": 19.2333,
+      "end_time": 19.4333,
+      "duration": 0.2,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.3026
+    },
+    {
+      "start_time": 19.3833,
+      "end_time": 19.6167,
+      "duration": 0.2333,
+      "hand": "left",
+      "primitive_name": "downward_drop",
+      "confidence": 0.8539
+    },
+    {
+      "start_time": 19.4,
+      "end_time": 19.6167,
+      "duration": 0.2167,
+      "hand": "right",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8762
+    },
+    {
+      "start_time": 19.45,
+      "end_time": 19.6667,
+      "duration": 0.2167,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.9784
+    },
+    {
+      "start_time": 19.55,
+      "end_time": 20.25,
+      "duration": 0.7,
+      "hand": "both",
+      "primitive_name": "two_hand_expansion",
+      "confidence": 1.0
+    },
+    {
+      "start_time": 19.6333,
+      "end_time": 19.85,
+      "duration": 0.2167,
+      "hand": "left",
+      "primitive_name": "left_sweep",
+      "confidence": 0.8652
+    },
+    {
+      "start_time": 19.6333,
+      "end_time": 20.3667,
+      "duration": 0.7333,
+      "hand": "right",
+      "primitive_name": "right_sweep",
+      "confidence": 0.8837
+    },
+    {
+      "start_time": 19.6833,
+      "end_time": 19.8333,
+      "duration": 0.15,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.2363
+    },
+    {
+      "start_time": 19.8667,
+      "end_time": 20.1333,
+      "duration": 0.2667,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.805
+    },
+    {
+      "start_time": 20.1667,
+      "end_time": 20.3167,
+      "duration": 0.15,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.2363
+    },
+    {
+      "start_time": 20.3333,
+      "end_time": 20.55,
+      "duration": 0.2167,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.9784
+    },
+    {
+      "start_time": 20.3833,
+      "end_time": 20.6167,
+      "duration": 0.2333,
+      "hand": "right",
+      "primitive_name": "upward_lift",
+      "confidence": 0.7892
+    },
+    {
+      "start_time": 20.5667,
+      "end_time": 20.7667,
+      "duration": 0.2,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.3026
+    },
+    {
+      "start_time": 20.5833,
+      "end_time": 21.4667,
+      "duration": 0.8833,
+      "hand": "both",
+      "primitive_name": "two_hand_contraction",
+      "confidence": 0.9559
+    },
+    {
+      "start_time": 20.6333,
+      "end_time": 21.3667,
+      "duration": 0.7333,
+      "hand": "left",
+      "primitive_name": "right_sweep",
+      "confidence": 0.8866
+    },
+    {
+      "start_time": 20.6333,
+      "end_time": 21.3667,
+      "duration": 0.7333,
+      "hand": "right",
+      "primitive_name": "left_sweep",
+      "confidence": 0.8863
+    },
+    {
+      "start_time": 20.7833,
+      "end_time": 21.0333,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8223
+    },
+    {
+      "start_time": 21.0833,
+      "end_time": 21.2167,
+      "duration": 0.1333,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.1372
+    },
+    {
+      "start_time": 21.2333,
+      "end_time": 21.4667,
+      "duration": 0.2333,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.9395
+    },
+    {
+      "start_time": 21.3833,
+      "end_time": 21.6167,
+      "duration": 0.2333,
+      "hand": "left",
+      "primitive_name": "downward_drop",
+      "confidence": 0.7978
+    },
+    {
+      "start_time": 21.3833,
+      "end_time": 21.6167,
+      "duration": 0.2333,
+      "hand": "right",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8851
+    },
+    {
+      "start_time": 21.4833,
+      "end_time": 21.6833,
+      "duration": 0.2,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.4262
+    },
+    {
+      "start_time": 21.55,
+      "end_time": 22.4333,
+      "duration": 0.8833,
+      "hand": "both",
+      "primitive_name": "two_hand_expansion",
+      "confidence": 0.958
+    },
+    {
+      "start_time": 21.6333,
+      "end_time": 22.3667,
+      "duration": 0.7333,
+      "hand": "left",
+      "primitive_name": "left_sweep",
+      "confidence": 0.8924
+    },
+    {
+      "start_time": 21.6333,
+      "end_time": 22.3667,
+      "duration": 0.7333,
+      "hand": "right",
+      "primitive_name": "right_sweep",
+      "confidence": 0.8979
+    },
+    {
+      "start_time": 21.7,
+      "end_time": 21.95,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8494
+    },
+    {
+      "start_time": 22.1333,
+      "end_time": 22.3833,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.8868
+    },
+    {
+      "start_time": 22.3833,
+      "end_time": 22.6167,
+      "duration": 0.2333,
+      "hand": "left",
+      "primitive_name": "downward_drop",
+      "confidence": 0.8924
+    },
+    {
+      "start_time": 22.3833,
+      "end_time": 22.6167,
+      "duration": 0.2333,
+      "hand": "right",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8167
+    },
+    {
+      "start_time": 22.4,
+      "end_time": 22.6,
+      "duration": 0.2,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.4955
+    },
+    {
+      "start_time": 22.5833,
+      "end_time": 23.4167,
+      "duration": 0.8333,
+      "hand": "both",
+      "primitive_name": "two_hand_contraction",
+      "confidence": 0.9456
+    },
+    {
+      "start_time": 22.6167,
+      "end_time": 22.8667,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8868
+    },
+    {
+      "start_time": 22.6333,
+      "end_time": 23.3333,
+      "duration": 0.7,
+      "hand": "right",
+      "primitive_name": "left_sweep",
+      "confidence": 0.8811
+    },
+    {
+      "start_time": 22.6333,
+      "end_time": 23.3667,
+      "duration": 0.7333,
+      "hand": "left",
+      "primitive_name": "right_sweep",
+      "confidence": 0.8884
+    },
+    {
+      "start_time": 23.05,
+      "end_time": 23.3,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.8494
+    },
+    {
+      "start_time": 23.3167,
+      "end_time": 23.5167,
+      "duration": 0.2,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.4262
+    },
+    {
+      "start_time": 23.35,
+      "end_time": 23.6,
+      "duration": 0.25,
+      "hand": "right",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8591
+    },
+    {
+      "start_time": 23.3833,
+      "end_time": 23.5167,
+      "duration": 0.1333,
+      "hand": "left",
+      "primitive_name": "downward_drop",
+      "confidence": 0.7873
+    },
+    {
+      "start_time": 23.5,
+      "end_time": 24.4333,
+      "duration": 0.9333,
+      "hand": "both",
+      "primitive_name": "two_hand_expansion",
+      "confidence": 1.0
+    },
+    {
+      "start_time": 23.5333,
+      "end_time": 23.7667,
+      "duration": 0.2333,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.9395
+    },
+    {
+      "start_time": 23.5333,
+      "end_time": 24.4333,
+      "duration": 0.9,
+      "hand": "left",
+      "primitive_name": "left_sweep",
+      "confidence": 0.8643
+    },
+    {
+      "start_time": 23.6167,
+      "end_time": 24.05,
+      "duration": 0.4333,
+      "hand": "right",
+      "primitive_name": "right_sweep",
+      "confidence": 0.8999
+    },
+    {
+      "start_time": 23.7833,
+      "end_time": 23.9167,
+      "duration": 0.1333,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.1372
+    },
+    {
+      "start_time": 23.9667,
+      "end_time": 24.2167,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.8223
+    },
+    {
+      "start_time": 24.2333,
+      "end_time": 24.4333,
+      "duration": 0.2,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.3026
+    },
+    {
+      "start_time": 24.45,
+      "end_time": 24.6167,
+      "duration": 0.1667,
+      "hand": "left",
+      "primitive_name": "downward_drop",
+      "confidence": 0.8451
+    },
+    {
+      "start_time": 24.45,
+      "end_time": 24.6667,
+      "duration": 0.2167,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.9784
+    },
+    {
+      "start_time": 24.5333,
+      "end_time": 25.5,
+      "duration": 0.9667,
+      "hand": "both",
+      "primitive_name": "two_hand_contraction",
+      "confidence": 1.0
+    },
+    {
+      "start_time": 24.6333,
+      "end_time": 25.3833,
+      "duration": 0.75,
+      "hand": "left",
+      "primitive_name": "right_sweep",
+      "confidence": 0.9106
+    },
+    {
+      "start_time": 24.6333,
+      "end_time": 25.4667,
+      "duration": 0.8333,
+      "hand": "right",
+      "primitive_name": "left_sweep",
+      "confidence": 0.8806
+    },
+    {
+      "start_time": 24.6833,
+      "end_time": 24.8333,
+      "duration": 0.15,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.2363
+    },
+    {
+      "start_time": 24.8167,
+      "end_time": 29.9833,
+      "duration": 5.1667,
+      "hand": "right",
+      "primitive_name": "circular_motion",
+      "confidence": 0.6752
+    },
+    {
+      "start_time": 24.8667,
+      "end_time": 25.1333,
+      "duration": 0.2667,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.805
+    },
+    {
+      "start_time": 25.1667,
+      "end_time": 25.3167,
+      "duration": 0.15,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.2363
+    },
+    {
+      "start_time": 25.3333,
+      "end_time": 25.55,
+      "duration": 0.2167,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.9784
+    },
+    {
+      "start_time": 25.4,
+      "end_time": 25.65,
+      "duration": 0.25,
+      "hand": "left",
+      "primitive_name": "downward_drop",
+      "confidence": 0.8725
+    },
+    {
+      "start_time": 25.4833,
+      "end_time": 25.6167,
+      "duration": 0.1333,
+      "hand": "right",
+      "primitive_name": "upward_lift",
+      "confidence": 0.7536
+    },
+    {
+      "start_time": 25.5667,
+      "end_time": 25.7667,
+      "duration": 0.2,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.3026
+    },
+    {
+      "start_time": 25.5833,
+      "end_time": 26.4333,
+      "duration": 0.85,
+      "hand": "both",
+      "primitive_name": "two_hand_expansion",
+      "confidence": 0.9301
+    },
+    {
+      "start_time": 25.6333,
+      "end_time": 26.3667,
+      "duration": 0.7333,
+      "hand": "right",
+      "primitive_name": "right_sweep",
+      "confidence": 0.8809
+    },
+    {
+      "start_time": 25.6667,
+      "end_time": 26.3667,
+      "duration": 0.7,
+      "hand": "left",
+      "primitive_name": "left_sweep",
+      "confidence": 0.8823
+    },
+    {
+      "start_time": 25.7833,
+      "end_time": 26.0333,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.8223
+    },
+    {
+      "start_time": 25.8667,
+      "end_time": 29.9833,
+      "duration": 4.1167,
+      "hand": "left",
+      "primitive_name": "circular_motion",
+      "confidence": 0.6856
+    },
+    {
+      "start_time": 26.0833,
+      "end_time": 26.2167,
+      "duration": 0.1333,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.1372
+    },
+    {
+      "start_time": 26.2333,
+      "end_time": 26.4667,
+      "duration": 0.2333,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.9395
+    },
+    {
+      "start_time": 26.3833,
+      "end_time": 26.6167,
+      "duration": 0.2333,
+      "hand": "left",
+      "primitive_name": "downward_drop",
+      "confidence": 0.7959
+    },
+    {
+      "start_time": 26.3833,
+      "end_time": 26.6167,
+      "duration": 0.2333,
+      "hand": "right",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8851
+    },
+    {
+      "start_time": 26.4833,
+      "end_time": 26.6833,
+      "duration": 0.2,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.4262
+    },
+    {
+      "start_time": 26.5667,
+      "end_time": 27.0333,
+      "duration": 0.4667,
+      "hand": "both",
+      "primitive_name": "two_hand_contraction",
+      "confidence": 0.8419
+    },
+    {
+      "start_time": 26.6333,
+      "end_time": 26.8833,
+      "duration": 0.25,
+      "hand": "left",
+      "primitive_name": "right_sweep",
+      "confidence": 0.8386
+    },
+    {
+      "start_time": 26.6333,
+      "end_time": 27.3667,
+      "duration": 0.7333,
+      "hand": "right",
+      "primitive_name": "left_sweep",
+      "confidence": 0.8979
+    },
+    {
+      "start_time": 26.7,
+      "end_time": 26.95,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.8494
+    },
+    {
+      "start_time": 27.1333,
+      "end_time": 27.3833,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8868
+    },
+    {
+      "start_time": 27.1833,
+      "end_time": 27.5,
+      "duration": 0.3167,
+      "hand": "both",
+      "primitive_name": "two_hand_contraction",
+      "confidence": 1.0
+    },
+    {
+      "start_time": 27.3833,
+      "end_time": 27.6167,
+      "duration": 0.2333,
+      "hand": "right",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8167
+    },
+    {
+      "start_time": 27.4,
+      "end_time": 27.6,
+      "duration": 0.2,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.4955
+    },
+    {
+      "start_time": 27.55,
+      "end_time": 28.4333,
+      "duration": 0.8833,
+      "hand": "both",
+      "primitive_name": "two_hand_expansion",
+      "confidence": 0.9602
+    },
+    {
+      "start_time": 27.6167,
+      "end_time": 27.8667,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.8868
+    },
+    {
+      "start_time": 27.6333,
+      "end_time": 28.3667,
+      "duration": 0.7333,
+      "hand": "left",
+      "primitive_name": "left_sweep",
+      "confidence": 0.8981
+    },
+    {
+      "start_time": 27.6333,
+      "end_time": 28.3667,
+      "duration": 0.7333,
+      "hand": "right",
+      "primitive_name": "right_sweep",
+      "confidence": 0.8773
+    },
+    {
+      "start_time": 28.05,
+      "end_time": 28.3,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8494
+    },
+    {
+      "start_time": 28.3167,
+      "end_time": 28.5167,
+      "duration": 0.2,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.4262
+    },
+    {
+      "start_time": 28.3833,
+      "end_time": 28.6167,
+      "duration": 0.2333,
+      "hand": "left",
+      "primitive_name": "downward_drop",
+      "confidence": 0.7978
+    },
+    {
+      "start_time": 28.3833,
+      "end_time": 28.6167,
+      "duration": 0.2333,
+      "hand": "right",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8276
+    },
+    {
+      "start_time": 28.5333,
+      "end_time": 28.7667,
+      "duration": 0.2333,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.9395
+    },
+    {
+      "start_time": 28.5667,
+      "end_time": 29.4667,
+      "duration": 0.9,
+      "hand": "both",
+      "primitive_name": "two_hand_contraction",
+      "confidence": 0.9478
+    },
+    {
+      "start_time": 28.6333,
+      "end_time": 29.3667,
+      "duration": 0.7333,
+      "hand": "left",
+      "primitive_name": "right_sweep",
+      "confidence": 0.8794
+    },
+    {
+      "start_time": 28.6333,
+      "end_time": 29.3667,
+      "duration": 0.7333,
+      "hand": "right",
+      "primitive_name": "left_sweep",
+      "confidence": 0.8997
+    },
+    {
+      "start_time": 28.7833,
+      "end_time": 28.9167,
+      "duration": 0.1333,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.1372
+    },
+    {
+      "start_time": 28.9667,
+      "end_time": 29.2167,
+      "duration": 0.25,
+      "hand": "head",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8223
+    },
+    {
+      "start_time": 29.2333,
+      "end_time": 29.4333,
+      "duration": 0.2,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.3026
+    },
+    {
+      "start_time": 29.3833,
+      "end_time": 29.6167,
+      "duration": 0.2333,
+      "hand": "left",
+      "primitive_name": "downward_drop",
+      "confidence": 0.854
+    },
+    {
+      "start_time": 29.3833,
+      "end_time": 29.6167,
+      "duration": 0.2333,
+      "hand": "right",
+      "primitive_name": "upward_lift",
+      "confidence": 0.8774
+    },
+    {
+      "start_time": 29.45,
+      "end_time": 29.6667,
+      "duration": 0.2167,
+      "hand": "head",
+      "primitive_name": "downward_drop",
+      "confidence": 0.9784
+    },
+    {
+      "start_time": 29.5333,
+      "end_time": 29.9833,
+      "duration": 0.45,
+      "hand": "both",
+      "primitive_name": "two_hand_expansion",
+      "confidence": 0.8529
+    },
+    {
+      "start_time": 29.6333,
+      "end_time": 29.9833,
+      "duration": 0.35,
+      "hand": "left",
+      "primitive_name": "left_sweep",
+      "confidence": 0.9031
+    },
+    {
+      "start_time": 29.6333,
+      "end_time": 29.9833,
+      "duration": 0.35,
+      "hand": "right",
+      "primitive_name": "right_sweep",
+      "confidence": 0.8668
+    },
+    {
+      "start_time": 29.6833,
+      "end_time": 29.8333,
+      "duration": 0.15,
+      "hand": "head",
+      "primitive_name": "still",
+      "confidence": 0.2363
+    }
+  ],
+  "analysis_params": {
+    "smooth_window": 5
+  }
+}
