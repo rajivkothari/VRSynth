@@ -1,17 +1,18 @@
-"""First bridge: captured motion -> Synth Riders objects (rails only).
+"""Bridge: captured motion -> Synth Riders objects (rails + notes).
 
-This is the start of the L5/L6 layer from ``docs/VR_CHOREOGRAPHY_CAPTURE.md``: it
-turns a dancer's actual controller paths into **rails** -- continuous traced
-hand paths -- placed in a normalized Synth Riders-style playfield. It does NOT
-yet emit single notes or walls, and it does NOT write a final ``.synth`` file.
+This is the L5/L6 layer from ``docs/VR_CHOREOGRAPHY_CAPTURE.md``: it turns a
+dancer's actual controller paths into **rails** (continuous traced hand paths)
+and **notes** (discrete hits) placed in a normalized Synth Riders-style playfield.
+It does NOT yet emit walls, and it does NOT write a final ``.synth`` file.
 
-Scope of this first pass:
+Scope of this pass:
 
-* Only **rails** are produced (notes and walls are later work).
-* Rails come from per-hand continuous motion (sweeps, lifts/drops, circles).
-  ``still`` produces nothing and ``alternating_punches`` is left for future note
-  generation; two-hand expansion/contraction overlaps the per-hand sweeps, so it
-  is not separately railed here.
+* **Rails** come from per-hand continuous motion (sweeps, lifts/drops, circles).
+* **Notes** are *checkpoints on the motion*, not independent beat detections:
+  gesture extremes / strong direction changes, punch endpoints, two-hand
+  expansion peaks, and beat-aligned points along long sweeps. Notes are filtered
+  so they don't fight the rails, stay reachable, keep left/right identity, and
+  respect a minimum per-hand spacing.
 
 ### Playfield coordinates
 
@@ -36,12 +37,13 @@ from typing import Any, Optional
 
 from .coordinate_systems import NORMALIZED_RANGE, NormalizedPoint
 from .motion import MotionRecording, PoseSample
-from .timing import seconds_to_beat, snap_time_to_grid
+from .timing import beat_to_seconds, seconds_to_beat, snap_time_to_grid
 from .motion_analysis import (
     CIRCULAR_MOTION,
     DOWNWARD_DROP,
     LEFT_SWEEP,
     RIGHT_SWEEP,
+    TWO_HAND_EXPANSION,
     UPWARD_LIFT,
     MovementSegment,
 )
@@ -49,12 +51,14 @@ from .motion_analysis import (
 __all__ = [
     "RailNode",
     "Rail",
+    "Note",
     "PLAYFIELD_X_RANGE",
     "PLAYFIELD_Y_RANGE",
     "DIFFICULTIES",
     "normalize_motion_to_playfield",
     "movement_segment_to_rail",
     "generate_rails_from_motion",
+    "generate_notes_from_motion",
 ]
 
 # Normalized playfield bounds. Single-sourced from the coordinate-system boundary
@@ -75,15 +79,20 @@ _RAIL_PRIMITIVES = frozenset(
 # Per-difficulty knobs: finer/longer rails for higher difficulties.
 DIFFICULTIES: dict[str, dict[str, float]] = {
     "Easy":   {"node_interval": 0.25, "min_duration": 0.50, "min_extent": 0.45,
-               "smooth_nodes": 3, "merge_gap": 0.30, "max_duration": 6.0, "snap_subdiv": 2},
+               "smooth_nodes": 3, "merge_gap": 0.30, "max_duration": 6.0,
+               "snap_subdiv": 2, "note_min_gap": 0.55},
     "Normal": {"node_interval": 0.20, "min_duration": 0.40, "min_extent": 0.40,
-               "smooth_nodes": 3, "merge_gap": 0.30, "max_duration": 5.0, "snap_subdiv": 4},
+               "smooth_nodes": 3, "merge_gap": 0.30, "max_duration": 5.0,
+               "snap_subdiv": 4, "note_min_gap": 0.42},
     "Hard":   {"node_interval": 0.16, "min_duration": 0.32, "min_extent": 0.32,
-               "smooth_nodes": 3, "merge_gap": 0.25, "max_duration": 4.0, "snap_subdiv": 4},
+               "smooth_nodes": 3, "merge_gap": 0.25, "max_duration": 4.0,
+               "snap_subdiv": 4, "note_min_gap": 0.34},
     "Expert": {"node_interval": 0.13, "min_duration": 0.26, "min_extent": 0.28,
-               "smooth_nodes": 1, "merge_gap": 0.22, "max_duration": 3.5, "snap_subdiv": 8},
+               "smooth_nodes": 1, "merge_gap": 0.22, "max_duration": 3.5,
+               "snap_subdiv": 8, "note_min_gap": 0.27},
     "Master": {"node_interval": 0.10, "min_duration": 0.22, "min_extent": 0.25,
-               "smooth_nodes": 1, "merge_gap": 0.20, "max_duration": 3.0, "snap_subdiv": 8},
+               "smooth_nodes": 1, "merge_gap": 0.20, "max_duration": 3.0,
+               "snap_subdiv": 8, "note_min_gap": 0.22},
 }
 
 # Drop consecutive rail nodes closer than this (normalized) to kill jitter.
@@ -94,6 +103,20 @@ _MIN_NODE_SPACING = 0.04
 # only snap when already very close, so expressive off-grid motion is preserved.
 _ANCHOR_SNAP_FRACTION = 0.5
 _INTERNAL_SNAP_FRACTION = 0.15
+
+# --- Note-generation tuning (normalized units unless noted) ---
+# Minimum prominence for a position extreme to count as a gesture checkpoint.
+_NOTE_EXTREME_AMPLITUDE = 0.15
+# How far forward (meters) past the hand's mean depth marks a punch endpoint.
+_PUNCH_EXTENSION_M = 0.20
+# Notes snap to the nearest grid line within half a cell (clean discrete hits).
+_NOTE_SNAP_FRACTION = 0.5
+# Reject a later note if reaching it from the previous one for that hand would
+# need more than this normalized speed (catches impossible hand jumps).
+_MAX_REACH_SPEED = 8.0
+# Allow notes within this many seconds of a rail's start/end (endpoints are fine);
+# notes strictly inside a rail are suppressed so they don't fight the rail.
+_RAIL_EDGE_EPS = 0.05
 
 
 @dataclass
@@ -154,6 +177,31 @@ class Rail:
             "end_time": self.end_time,
             "nodes": [n.to_dict() for n in self.nodes],
         }
+
+
+@dataclass
+class Note:
+    """A discrete hit: a checkpoint on the dancer's motion.
+
+    ``hand`` is ``"left"`` or ``"right"`` (preserved Synth Riders hand identity).
+    ``source`` records which checkpoint produced it (gesture extreme, punch,
+    expansion, sweep beat) for traceability. Position is normalized playfield.
+    """
+
+    time_seconds: float
+    hand: str
+    x: float
+    y: float
+    beat: Optional[float] = None
+    source: str = ""
+    confidence: float = 1.0
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+    def to_normalized_point(self) -> NormalizedPoint:
+        """This note's position as a normalized point (export maps to .synth)."""
+        return NormalizedPoint(x=self.x, y=self.y, z=0.0)
 
 
 # --------------------------------------------------------------------------- #
@@ -249,6 +297,225 @@ def generate_rails_from_motion(
 
     rails.sort(key=lambda r: (r.start_time, r.hand))
     return rails
+
+
+# --------------------------------------------------------------------------- #
+# Recording + segments -> notes (checkpoints on motion)
+# --------------------------------------------------------------------------- #
+def generate_notes_from_motion(
+    recording: MotionRecording,
+    segments: list[MovementSegment],
+    bpm: Optional[float],
+    offset: Optional[float],
+    difficulty: str = "Master",
+) -> list[Note]:
+    """Generate notes as checkpoints on the dancer's motion (not beat detections).
+
+    Per hand, candidate hits are gathered from gesture extremes / strong direction
+    changes, punch endpoints, two-hand expansion peaks, and beat-aligned points
+    along long sweeps. Candidates are then lightly beat-snapped and filtered:
+    notes strictly inside a rail (for the same hand) are dropped so they don't
+    fight the rail, a minimum per-hand spacing is enforced (keeping the
+    higher-confidence note on conflict), unreachable hand jumps are removed, and
+    positions are clamped to the playfield. Left/right identity is preserved.
+
+    Returns notes sorted by time then hand.
+    """
+    cfg = _difficulty_config(difficulty)
+    offset = offset or 0.0
+    normalized = normalize_motion_to_playfield(recording)
+    times = [t for t, _, _ in normalized["left"]]
+    if len(times) < 3:
+        return []
+    dt = (times[-1] - times[0]) / (len(times) - 1)
+
+    # Rails are generated so notes can avoid fighting them.
+    rail_spans: dict[str, list[tuple[float, float]]] = {"left": [], "right": []}
+    for rail in generate_rails_from_motion(recording, segments, difficulty):
+        rail_spans[rail.hand].append((rail.start_time, rail.end_time))
+
+    notes: list[Note] = []
+    for hand in ("left", "right"):
+        path = normalized[hand]
+        candidates: list[tuple[float, float, float, str, float]] = []
+        candidates += _gesture_extreme_candidates(path, dt)
+        candidates += _punch_candidates(recording, path, hand)
+        candidates += _expansion_candidates(path, segments)
+        candidates += _sweep_beat_candidates(path, segments, hand, bpm, offset)
+        notes += _finalize_notes(
+            candidates, hand, cfg, bpm, offset, rail_spans[hand]
+        )
+
+    notes.sort(key=lambda n: (n.time_seconds, n.hand))
+    return notes
+
+
+def _gesture_extreme_candidates(
+    path: list[tuple[float, float, float]], dt: float
+) -> list[tuple[float, float, float, str, float]]:
+    """Windowed local extrema of x and y -> gesture extremes / direction changes."""
+    times = [p[0] for p in path]
+    xs = _smooth([p[1] for p in path], 3)
+    ys = _smooth([p[2] for p in path], 3)
+    half = max(2, int(round(0.12 / dt))) if dt > 0 else 2
+    out: list[tuple[float, float, float, str, float]] = []
+    for axis in (xs, ys):
+        for i in range(half, len(axis) - half):
+            window = axis[i - half : i + half + 1]
+            center = axis[i]
+            is_peak = center >= max(window) and window.index(max(window)) == half
+            is_valley = center <= min(window) and window.index(min(window)) == half
+            if is_peak:
+                prominence = center - min(window)
+            elif is_valley:
+                prominence = max(window) - center
+            else:
+                continue
+            if prominence < _NOTE_EXTREME_AMPLITUDE:
+                continue
+            conf = _clamp(0.55 + prominence, 0.0, 1.0)
+            out.append((times[i], path[i][1], path[i][2], "gesture_extreme", conf))
+    return out
+
+
+def _punch_candidates(
+    recording: MotionRecording,
+    path: list[tuple[float, float, float]],
+    hand: str,
+) -> list[tuple[float, float, float, str, float]]:
+    """Forward-extension endpoints (deepest -Z) of punches -> high-confidence hits."""
+    attr = {"left": "left_controller", "right": "right_controller"}[hand]
+    zs = [getattr(f, attr).position_z for f in recording.frames]
+    times = [p[0] for p in path]
+    n = len(zs)
+    if n < 5:
+        return []
+    mean_z = sum(zs) / n
+    half = 3
+    out: list[tuple[float, float, float, str, float]] = []
+    for i in range(half, n - half):
+        window = zs[i - half : i + half + 1]
+        # Most-forward point = local minimum of z (forward is -Z).
+        if zs[i] <= min(window) and window.index(min(window)) == half:
+            if mean_z - zs[i] >= _PUNCH_EXTENSION_M:
+                out.append((times[i], path[i][1], path[i][2], "punch", 0.95))
+    return out
+
+
+def _expansion_candidates(
+    path: list[tuple[float, float, float]],
+    segments: list[MovementSegment],
+) -> list[tuple[float, float, float, str, float]]:
+    """Two-hand expansion peaks (max separation ~ segment end) -> a hit per hand."""
+    out: list[tuple[float, float, float, str, float]] = []
+    for seg in segments:
+        if seg.hand == "both" and seg.primitive_name == TWO_HAND_EXPANSION:
+            t = seg.end_time
+            x, y = _interp_xy(path, t)
+            out.append((t, x, y, "expansion", _clamp(0.6 + 0.3 * seg.confidence, 0.0, 1.0)))
+    return out
+
+
+def _sweep_beat_candidates(
+    path: list[tuple[float, float, float]],
+    segments: list[MovementSegment],
+    hand: str,
+    bpm: Optional[float],
+    offset: float,
+) -> list[tuple[float, float, float, str, float]]:
+    """Beat-aligned points along long sweeps (>= 1 beat) for this hand."""
+    if not bpm or bpm <= 0:
+        return []
+    beat_seconds = 60.0 / bpm
+    out: list[tuple[float, float, float, str, float]] = []
+    for seg in segments:
+        if seg.hand != hand or seg.primitive_name not in (LEFT_SWEEP, RIGHT_SWEEP):
+            continue
+        if seg.end_time - seg.start_time < beat_seconds:
+            continue
+        first = math.ceil(seconds_to_beat(seg.start_time, bpm, offset))
+        last = math.floor(seconds_to_beat(seg.end_time, bpm, offset))
+        for beat in range(int(first), int(last) + 1):
+            t = beat_to_seconds(beat, bpm, offset)
+            x, y = _interp_xy(path, t)
+            out.append((t, x, y, "sweep_beat", 0.6))
+    return out
+
+
+def _finalize_notes(
+    candidates: list[tuple[float, float, float, str, float]],
+    hand: str,
+    cfg: dict[str, float],
+    bpm: Optional[float],
+    offset: float,
+    rail_spans: list[tuple[float, float]],
+) -> list[Note]:
+    snap_enabled = bool(bpm and bpm > 0)
+    cell = 60.0 / (bpm * cfg["snap_subdiv"]) if snap_enabled else 0.0
+
+    # 1. Light beat snapping for clean discrete hits.
+    snapped: list[list[float | str]] = []
+    for t, x, y, source, conf in candidates:
+        if snap_enabled:
+            t = snap_time_to_grid(
+                t, bpm, offset, int(cfg["snap_subdiv"]),
+                tolerance=cell * _NOTE_SNAP_FRACTION,
+            )
+        snapped.append([t, x, y, source, conf])
+    snapped.sort(key=lambda c: c[0])
+
+    # 2. Don't fight rails. Punches (forward strikes) and expansion accents are
+    #    distinct hits that don't conflict with a 2D rail trace, so they pass
+    #    through. Path-following sources (gesture extremes, beat points along
+    #    sweeps) lie *on* the traced rail, so drop those that fall strictly inside
+    #    a rail for this hand -- they would clutter/fight the rail.
+    def inside_rail(t: float) -> bool:
+        return any(s + _RAIL_EDGE_EPS < t < e - _RAIL_EDGE_EPS for s, e in rail_spans)
+
+    _SUPPRESSED_INSIDE_RAILS = ("gesture_extreme", "sweep_beat")
+    filtered = [
+        c for c in snapped
+        if not (c[3] in _SUPPRESSED_INSIDE_RAILS and inside_rail(c[0]))
+    ]
+
+    # 3. Minimum per-hand spacing; on conflict keep the higher-confidence note.
+    min_gap = cfg["note_min_gap"]
+    kept: list[list[float | str]] = []
+    for c in filtered:
+        if kept and c[0] - kept[-1][0] < min_gap:
+            if c[4] > kept[-1][4]:
+                kept[-1] = c
+            continue
+        kept.append(c)
+
+    # 4. Reject impossible hand jumps (too far, too fast).
+    reachable: list[list[float | str]] = []
+    for c in kept:
+        if reachable:
+            prev = reachable[-1]
+            gap = c[0] - prev[0]
+            if gap > 0:
+                speed = math.hypot(c[1] - prev[1], c[2] - prev[2]) / gap
+                if speed > _MAX_REACH_SPEED:
+                    continue
+        reachable.append(c)
+
+    # 5. Build Notes (clamp defensively; attach beat).
+    notes: list[Note] = []
+    for t, x, y, source, conf in reachable:
+        beat = seconds_to_beat(t, bpm, offset) if snap_enabled else None
+        notes.append(
+            Note(
+                time_seconds=t,
+                hand=hand,
+                x=_clamp(x, *PLAYFIELD_X_RANGE),
+                y=_clamp(y, *PLAYFIELD_Y_RANGE),
+                beat=beat,
+                source=source,
+                confidence=conf,
+            )
+        )
+    return notes
 
 
 def _merge_spans(

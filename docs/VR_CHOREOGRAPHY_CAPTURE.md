@@ -548,6 +548,22 @@ rate, average/peak hand speed (left, right, combined), segment count, per-
 primitive counts, and a time-ordered timeline of detected movement segments. It
 reports *choreography intent only* — no Synth Riders notes are produced.
 
+**Build a map from a recording** (the `motion-new` command):
+
+```bash
+python3 -m synthcopilot motion-new \
+    --motion debug/fake_motion_recording.json \
+    --audio song.mp3 --bpm 123 \
+    --output captured_dance.synth
+```
+
+This loads the recording, segments it, generates **rails + notes**, prints a map
+summary, and exports the result. Producing a real editor-importable `.synth`
+requires `synth_mapping_helper` **and** a verified coordinate profile (§8.7);
+until both exist, it writes the rails+notes map as `*.normalized.json` (normalized
+coordinate space) instead. The legacy `new` command (Product A, MP3-to-map) is
+retained as a deprecated stub.
+
 ---
 
 ## 8. How Captured Movement Becomes Notes, Rails, and Walls
@@ -589,6 +605,17 @@ A **note** is a deliberate strike. Signals:
 - An explicit trigger press (§4.4) → forced note.
 - Position at the hit, projected onto the play plane and normalized, becomes the
   note's 2D location. The controller (L/R) drives the note color/hand.
+
+> **Implemented (first pass):** `generate_notes_from_motion(recording, segments,
+> bpm, offset, difficulty)` treats notes as **checkpoints on the motion, not beat
+> detections**. Candidates come from gesture extremes / strong direction changes,
+> punch endpoints (deepest forward extension), two-hand expansion peaks, and
+> beat-aligned points along long sweeps. They are then lightly beat-snapped and
+> filtered: a minimum per-hand spacing (avoid density), reachability (no
+> impossible hand jumps), left/right identity preserved, positions clamped to the
+> playfield, and **path-following notes that fall inside a rail are dropped so
+> they don't fight it** (punch/expansion accents, being distinct from the 2D rail
+> trace, are kept). Output is normalized `Note`s — see §8.7.
 
 ### 8.3 Rails (continuous traces)
 
